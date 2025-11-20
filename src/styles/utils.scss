@@ -1,0 +1,105 @@
+/* ================================= Generic ================================ */
+
+@mixin default() {
+  position: relative;
+  box-sizing: border-box;
+
+  transition: all 100ms ease-out;
+  transition-behavior: allow-discrete;
+
+  outline-color: transparent;
+}
+
+@mixin reset($defaults: true) {
+  all: unset;
+  @if $defaults { @include default(); }
+}
+
+@mixin flexbox($reset: false, $direction: column) {
+  @if $reset { @include reset(); }
+
+  display: flex;
+  flex-direction: $direction;
+}
+
+@mixin flex-center() {
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin fill-absolute() {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+@mixin fill-fixed() {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+@mixin hide-scrollbar() {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* ================================ Coloring ================================ */
+
+@function mix($colors...) {
+  @return color-mix(in srgb, $colors);
+}
+
+@function set-alpha($color, $alpha: 100%, $opaque: false) {
+  @return mix($color $alpha, if($opaque, black, transparent));
+}
+
+/* ============================== Theme Methods ============================= */
+
+@function C($name, $alpha: 100%) {
+  /* Red fallback to scream at me that I misspelled the color name */
+  $color: var(--x-color-#{$name}, red);
+
+  @if $alpha == 100% { @return $color; }
+  @else              { @return set-alpha($color, $alpha); }
+}
+
+@function V($name) {
+  /* 175.26cm fallback 'cause it's funny */
+  $value: var(--x-value-#{$name}, 175.26cm);
+  @return $value;
+}
+
+/* ================================= Sizing ================================= */
+
+@mixin width($value, $mode: 'none') {
+  width: $value;
+  @if $mode == 'min' or $mode == 'all' { min-width: $value; }
+  @if $mode == 'max' or $mode == 'all' { max-width: $value; }
+}
+
+@mixin height($value, $mode: 'none') {
+  height: $value;
+  @if $mode == 'min' or $mode == 'all' { min-height: $value; }
+  @if $mode == 'max' or $mode == 'all' { max-height: $value; }
+}
+
+@mixin size($value, $mode: 'none') {
+  @include width ($value, $mode);
+  @include height($value, $mode);
+}
+
+/* ============================== Screen Types ============================== */
+
+@mixin small-screen {
+  @media /* small */ screen and (max-width: 786px) { @content; }
+}
+
+@mixin wide-screen {
+  @media /* wide */ screen and (min-width: 787px) { @content; }
+}

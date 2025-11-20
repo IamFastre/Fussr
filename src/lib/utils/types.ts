@@ -1,0 +1,31 @@
+export type KeyOf<T> = keyof T;
+export type ValueOf<T> = T[keyof T];
+
+export type UnionPick<T, K extends T> = T & K;
+
+export type Without<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type OmitNever<T> = { [K in keyof T as T[K] extends never ? never : K]: T[K]; };
+
+export type RequiredKeys<T> = { [K in keyof T]-?: object extends Pick<T, K> ? never : K }[keyof T];
+export type OptionalKeys<T> = { [K in keyof T]-?: object extends Pick<T, K> ? K : never }[keyof T];
+
+export type OnlyOptional<T> = { [K in keyof T as undefined extends T[K] ? K : never]-?: Exclude<T[K], undefined>; };
+export type OnlyRequired<T> = { [K in keyof T as undefined extends T[K] ? never : K]-?: Exclude<T[K], undefined>; };
+
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [P in K] ?: T[K] };
+export type MakeRequired<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: T[K] };
+
+export type DeepPartial<T>  = { [P in keyof T] ?: DeepPartial<T[P]>;  };
+export type DeepRequired<T> = { [P in keyof T]-?: DeepRequired<T[P]>; };
+
+export type Nullable = null | undefined;
+
+export type Obj = { [key:string]: JSON | undefined }
+
+export type JSON =
+  | string
+  | number
+  | boolean
+  | null
+  | Obj
+  | JSON[];

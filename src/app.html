@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-theme="default">
+	<head>
+		<!-- Info ------------------------------------------------------------------>
+		<title>%sveltekit.env.PUBLIC_NAME%</title>
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+		<link rel="manifest" href="/manifest.webmanifest">
+		<meta name="description" content="%sveltekit.env.PUBLIC_DESC%" />
+		<!-- Metas ----------------------------------------------------------------->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, viewport-fit=cover" />
+		<!-- Scripts --------------------------------------------------------------->
+		<script title="ThemeSync">
+			function syncTheme() {
+				const html = document.documentElement;
+				const theme = JSON.parse(localStorage.getItem('theme')) ?? 'default';
+
+				html.setAttribute('data-theme', theme);
+			}
+
+			// Resync when local storage value is changed
+			window.addEventListener('custom-local-storage', e => {
+				if (e.detail.key === 'theme')
+					syncTheme();
+			});
+
+			// Initial sync
+			syncTheme();
+		</script>
+		<!-- Other ----------------------------------------------------------------->
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<!-- SvelteKit Head -------------------------------------------------------->
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<content>
+			%sveltekit.body%
+		</content>
+	</body>
+</html>

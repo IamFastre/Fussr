@@ -1,0 +1,63 @@
+@use "@/styles/fonts.scss";
+@use "@/styles/theme.scss";
+
+@use "@/styles/utils.scss" as *;
+
+:root {
+  color: C(secondary);
+  background-color: C(primary);
+
+  font-family: Montserrat;
+  font-synthesis: style small-caps;
+  -webkit-font-smoothing: antialiased;
+
+  interpolate-size: allow-keywords;
+}
+
+html {
+  @include flexbox(true);
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar { display: none; }
+
+  min-width: 100dvw;
+  min-height: 100dvh;
+}
+
+body {
+  @include flexbox(true);
+  min-height: 100vh;
+}
+
+content {
+  display: contents;
+}
+
+main {
+  @include flexbox(true);
+
+  $h100f: calc(100dvh);
+  $h100s: calc($h100f - V(safe-inset-top) - V(safe-inset-bottom));
+  $h100n: calc($h100s - V(nav-height));
+
+  &:where([data-variant=page-full]) { @include height($h100f, 'all'); }
+  &:where([data-variant=page-safe]) { @include height($h100s, 'all'); }
+  &:where([data-variant=page-nav])  { @include height($h100n, 'all'); }
+}
+
+:where(
+  header, main, footer,
+  nav, section, div,
+  form, label, button,
+  article, summary, details
+) { @include flexbox(true); }
+
+a:where([data-variant=wrapper]) {
+  @include flexbox(true);
+  color: inherit;
+  cursor: pointer;
+}
