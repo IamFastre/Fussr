@@ -1,5 +1,5 @@
 {
-	"name": "svelte-template",
+	"name": "fussr",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
@@ -24,6 +24,8 @@
 	},
 	"dependencies": {
 		"@lucide/svelte": "^0.552.0",
+		"@supabase/ssr": "^0.7.0",
+		"@supabase/supabase-js": "^2.84.0",
 		"lodash": "^4.17.21",
 		"titchy": "^0.0.31"
 	}
