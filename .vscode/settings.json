@@ -1,0 +1,9 @@
+{
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll.ts": "explicit",
+      "source.removeUnusedImports": "explicit"
+    }
+  }
+}
