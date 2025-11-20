@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: Montserrat;
-  src: url("/fonts/Montserrat/Variable.ttf");
+  src: url("/fonts/Montserrat/Variable-Normal.ttf");
   font-weight: 100 900;
   font-style: normal;
 }
@@ -12,4 +12,13 @@
   src: url("/fonts/Montserrat/Variable-Italic.ttf");
   font-weight: 100 900;
   font-style: italic;
+}
+
+/* =============================== Alexandria =============================== */
+
+@font-face {
+  font-family: Alexandria;
+  src: url("/fonts/Alexandria/Variable.ttf");
+  font-weight: 100 900;
+  font-style: normal italic;
 }
