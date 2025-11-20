@@ -1,3 +1,23 @@
+/* ========================================================================== */
+/*                                   Generic                                  */
+/* ========================================================================== */
+
+export type Nullable = null | undefined;
+
+export type Obj = { [key:string]: JSON | undefined }
+
+export type JSON =
+  | string
+  | number
+  | boolean
+  | null
+  | Obj
+  | JSON[];
+
+/* ========================================================================== */
+/*                                 Functional                                 */
+/* ========================================================================== */
+
 export type KeyOf<T> = keyof T;
 export type ValueOf<T> = T[keyof T];
 
@@ -18,14 +38,18 @@ export type MakeRequired<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: T[K]
 export type DeepPartial<T>  = { [P in keyof T] ?: DeepPartial<T[P]>;  };
 export type DeepRequired<T> = { [P in keyof T]-?: DeepRequired<T[P]>; };
 
-export type Nullable = null | undefined;
+/* ========================================================================== */
+/*                                 API Related                                */
+/* ========================================================================== */
 
-export type Obj = { [key:string]: JSON | undefined }
+export interface ErrorAPI {
+  code?: number | string;
+  description?: string | null;
+  message: string;
+  side?: "CL" | "SR" | "DB";
+}
 
-export type JSON =
-  | string
-  | number
-  | boolean
-  | null
-  | Obj
-  | JSON[];
+export type ResultAPI<T> = (
+  { data: T;    error: null;     } |
+  { data: null; error: ErrorAPI; }
+);
