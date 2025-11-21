@@ -1,32 +1,36 @@
 <script lang="ts">
-  import { Button, Screen } from "titchy";
+  import { ButtonGroup, Button, Panel, Screen, Link } from "titchy";
+
   import { m } from "@/paraglide/messages";
-  import { setLocale } from "@/paraglide/runtime";
+  import { Footer } from "$/components";
 </script>
 
 <Screen>
-  <div class="langs">
-    {m.language()}
-    <Button onclick={() => setLocale('en')}>en</Button>
-    <Button onclick={() => setLocale('ar')}>ar</Button>
-  </div>
   <div class="hello">
-    <span>
-      {m.hello()}
-    </span>
+    <Panel class="hi" centered>
+      <span>
+        {m.welcome({ name:m.fussr() })}
+      </span>
+      <ButtonGroup class="group">
+        <Link variant="wrapper" href="/auth/sign-in">
+          <Button>
+            {m.auth_sign_in()}
+          </Button>
+        </Link>
+        <Link variant="wrapper" href="/auth/sign-up">
+          <Button>
+            {m.auth_sign_up()}
+          </Button>
+        </Link>
+      </ButtonGroup>
+    </Panel>
   </div>
 </Screen>
 
+<Footer />
+
 <style lang="scss">
   @use "@/styles/utils.scss" as *;
-
-  .langs {
-    flex-direction: row;
-    align-items: center;
-
-    gap: 10px;
-    padding: 10px;
-  }
 
   .hello {
     flex: 1;
@@ -34,8 +38,19 @@
 
     span {
       text-align: center;
-      font-size: 6rem;
+      font-size: 4rem;
       font-weight: 100;
+    }
+
+    :global
+    .titchy.panel.hi {
+      margin: 25px;
+      padding: 50px;
+      gap: 50px;
+
+      .titchy.button-group.group {
+        direction: ltr;
+      }
     }
   }
 </style>

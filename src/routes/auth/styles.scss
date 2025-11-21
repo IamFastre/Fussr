@@ -20,8 +20,14 @@
       @include flex-center();
       background-color: C(secondary, 5%);
 
-      .logo {
-        @include size(100px);
+      .home-link {
+        @include flex-center();
+        @include small-screen { flex-direction: row;    h2 { display: none; } }
+        @include wide-screen  { flex-direction: column; h2 { display: flex; } }
+
+        .logo {
+          @include size(120px);
+        }
       }
     }
 
