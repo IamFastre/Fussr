@@ -1,0 +1,6 @@
+@use "@/styles/utils.scss" as *;
+
+.title {
+  flex: 1;
+  @include flex-center();
+}
