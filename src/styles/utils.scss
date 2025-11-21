@@ -24,6 +24,8 @@
 
 @mixin flex-center() {
   justify-content: center;
+  justify-items: center;
+  align-content: center;
   align-items: center;
 }
 
@@ -63,7 +65,7 @@
 
 @function C($name, $alpha: 100%) {
   /* Red fallback to scream at me that I misspelled the color name */
-  $color: var(--x-color-#{$name}, red);
+  $color: var(--fussr-color-#{$name}, red);
 
   @if $alpha == 100% { @return $color; }
   @else              { @return set-alpha($color, $alpha); }
@@ -71,7 +73,7 @@
 
 @function V($name) {
   /* 175.26cm fallback 'cause it's funny */
-  $value: var(--x-value-#{$name}, 175.26cm);
+  $value: var(--fussr-value-#{$name}, 175.26cm);
   @return $value;
 }
 

@@ -41,16 +41,9 @@ content {
   display: contents;
 }
 
-main {
-  @include flexbox(true);
-
-  $h100f: calc(100dvh);
-  $h100s: calc($h100f - V(safe-inset-top) - V(safe-inset-bottom));
-  $h100n: calc($h100s - V(nav-height));
-
-  &:where([data-variant=page-full]) { @include height($h100f, 'all'); }
-  &:where([data-variant=page-safe]) { @include height($h100s, 'all'); }
-  &:where([data-variant=page-nav])  { @include height($h100n, 'all'); }
+h1, h2, h3,
+h4, h5, h6 {
+  margin: 0;
 }
 
 :where(
@@ -64,4 +57,13 @@ a:where([data-variant=wrapper]) {
   @include flexbox(true);
   color: inherit;
   cursor: pointer;
+}
+
+/* ========================================================================== */
+/*                                   Titchy                                   */
+/* ========================================================================== */
+
+.titchy {
+  --titchy-color-primary: var(--fussr-color-primary);
+  --titchy-color-accent: var(--fussr-color-accent);
 }

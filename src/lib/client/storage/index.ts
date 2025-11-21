@@ -2,8 +2,8 @@ import { browser } from "$app/environment";
 
 import { keys } from "$/utils/funcs";
 
-import type { LocalStorageEntries } from "./types";
 import { DefaultLocalStorageEntries } from "./default";
+import type { LocalStorageEntries } from "./types";
 
 export * from "./default";
 export * from "./types";
@@ -58,7 +58,7 @@ export class StyleTheme {
 
     const html = document.documentElement;
     const style = getComputedStyle(html);
-    const value = style.getPropertyValue(`--x-${category}-${name}`);
+    const value = style.getPropertyValue(`--fussr-${category}-${name}`);
 
     if (value.length)
       return value;
