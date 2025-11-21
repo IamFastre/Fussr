@@ -1,5 +1,17 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "hello": "مرحبًا!",
-  "language": "اللغة"
+  "language": "اللغة",
+  "auth_email": "البريد الإلكتروني",
+  "auth_password": "كلمة السر",
+  "auth_password_placeholder": "8 حروف و أرقام أو أكتر",
+  "auth_sign_up": "سجل حساب جديد",
+  "auth_sign_in": "سجل الدخول",
+  "auth_got_an_account": "ألديك حساب بالفعل؟",
+  "auth_create_account": "أنشئ حساب",
+  "auth_forgot_password": "نسيت كلمة السر؟",
+  "fussr": "فسّر",
+  "auth_email_placeholder": "user@example.com",
+  "auth_got_no_account": "ليس لديك حساب؟",
+  "auth_signing_in": "تسجيل الدخول"
 }

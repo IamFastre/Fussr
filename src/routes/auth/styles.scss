@@ -1,6 +1,65 @@
 @use "@/styles/utils.scss" as *;
 
-.title {
-  flex: 1;
-  @include flex-center();
+:global
+.titchy.screen.auth {
+  align-items: stretch;
+  justify-content: center;
+}
+
+.content {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px;
+
+  @include small-screen { flex-direction: column; }
+  @include wide-screen  { flex-direction: row;    }
+
+  :global {
+    .titchy.panel.logo-container {
+      @include flex-center();
+      background-color: C(secondary, 5%);
+
+      .logo {
+        @include size(100px);
+      }
+    }
+
+    .titchy.panel.auth-container {
+      min-width: min(400px, 80dvw);
+
+      @include small-screen { padding: 25px; }
+      @include wide-screen  { padding: 35px; }
+
+      > h1 {
+        margin-bottom: 20px;
+      }
+
+      .titchy.separator.separator {
+        margin: 5px 0;
+      }
+    }
+
+    .label-content {
+      flex-direction: row;
+      align-items: center;
+      gap: 1ch;
+    }
+
+    .error {
+      flex-direction: row;
+      align-items: center;
+      gap: 1ch;
+
+      color: C(danger);
+      font-size: 0.8em;
+
+      > svg { @include size(1.5em); }
+    }
+
+    .link {
+      @include small-screen { margin-top: 10px; }
+      @include wide-screen  { margin-top: 15px; }
+    }
+  }
 }
