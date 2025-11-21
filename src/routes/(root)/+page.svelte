@@ -1,15 +1,5 @@
 <script lang="ts">
   import { Screen } from "titchy";
-  import { api } from "$/client/api";
-
-  $effect(() => {
-    const func = async () => {
-      const res = await api({ method:'GET', path:'/auth' });
-      console.log(res)
-    }
-
-    func()
-  });
 </script>
 
 <Screen>
