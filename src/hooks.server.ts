@@ -6,6 +6,9 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { PRIVATE_SUPABASE_ADMIN_KEY } from '$env/static/private';
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 
+import type { Database } from '$/supabase/types';
+import { paraglideMiddleware } from '@/paraglide/server';
+
 // Directories that will not need auth and won't redirect to login
 const AUTHLESS_DIRECTORIES = [
   '/',
@@ -28,7 +31,7 @@ const supabase: Handle = async ({ event, resolve }) => {
   event.locals.supabase = { } as typeof event.locals.supabase;
 
   // Setting up the anon client //
-  event.locals.supabase.anon = createAnonClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+  event.locals.supabase.anon = createAnonClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
     cookies: {
       getAll: () => event.cookies.getAll(),
       setAll: (cookiesToSet) => {
@@ -40,7 +43,7 @@ const supabase: Handle = async ({ event, resolve }) => {
   });
 
   // Setting up the admin client //
-  event.locals.supabase.admin = createAdminClient(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_ADMIN_KEY, {
+  event.locals.supabase.admin = createAdminClient<Database>(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_ADMIN_KEY, {
     // Making sure it doesn't consider the server a user
     auth: {
       autoRefreshToken: false,
@@ -98,4 +101,15 @@ const authGuard: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handle:Handle = sequence(supabase, authGuard);
+const paraglide: Handle = async ({ event, resolve }) => {
+	return await paraglideMiddleware(event.request, ({ request:localizedRequest, locale }) => {
+		event.request = localizedRequest;
+
+    return resolve(event, {
+			transformPageChunk:
+        ({ html }) => html.replace('%lang%', locale)
+		});
+  });
+}
+
+export const handle:Handle = sequence(supabase, authGuard, paraglide);

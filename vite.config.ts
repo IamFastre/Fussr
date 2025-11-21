@@ -1,3 +1,4 @@
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, loadEnv } from 'vite';
 
@@ -8,6 +9,13 @@ export default defineConfig(({ mode }) => {
   return {
     server:  { port },
     preview: { port },
-    plugins: [sveltekit()],
+
+    plugins: [
+      sveltekit(),
+      paraglideVitePlugin({
+        project: './i18n.inlang',
+        outdir: './src/paraglide',
+      }),
+    ],
   };
 });
