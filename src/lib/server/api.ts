@@ -1,5 +1,7 @@
 import { sort } from "$/utils";
 import type { ErrorAPI, JSON, ResultAPI, Without } from "$/utils/types";
+import type { AuthError, PostgrestError } from "@supabase/supabase-js";
+import type { ZodError } from "zod";
 
 /* ========================================================================== */
 
@@ -8,8 +10,8 @@ import type { ErrorAPI, JSON, ResultAPI, Without } from "$/utils/types";
  * Can take additional `init` or override them.
  * @returns A new JSON Response.
  */
-export function result<T extends JSON | object>(data:T | null, error:Without<Required<ErrorAPI>, 'code'> & { code?: ErrorAPI['code'] } | null, init:ResponseInit) {
-  const res = { data, error: sort(error) } as ResultAPI<T>;
+export function result<T extends JSON | object>(data: T | null, error: Without<Required<ErrorAPI>, 'code'> & { code?:ErrorAPI['code'] } | null, init: ResponseInit) {
+  const res = { data, error:  sort(error) } as ResultAPI<T>;
   return Response.json(res, init);
 }
 
@@ -19,7 +21,7 @@ export function result<T extends JSON | object>(data:T | null, error:Without<Req
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 200 (OK).
  */
-export function success<T extends JSON | object>(data:T, init?:ResponseInit) {
+export function success<T extends JSON | object>(data: T, init?: ResponseInit) {
   return result(
     data, null,
     { status: 200, statusText: "OK", ...init }
@@ -32,7 +34,7 @@ export function success<T extends JSON | object>(data:T, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 404 (Not Found).
  */
-export function notfound(error:ErrorAPI, init?:ResponseInit) {
+export function notfound(error: ErrorAPI, init?: ResponseInit) {
   return result(
     null,
     { side: "CL", description: null, ...error },
@@ -46,7 +48,7 @@ export function notfound(error:ErrorAPI, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 400 (Bad Request).
  */
-export function bad(error:ErrorAPI, init?:ResponseInit) {
+export function bad(error: ErrorAPI, init?: ResponseInit) {
   return result(
     null,
     { side: "CL", description: null, ...error },
@@ -60,7 +62,7 @@ export function bad(error:ErrorAPI, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 403 (Forbidden).
  */
-export function forbidden(error:ErrorAPI, init?:ResponseInit) {
+export function forbidden(error: ErrorAPI, init?: ResponseInit) {
   return result(
     null,
     { side: "CL", description: null, ...error },
@@ -74,7 +76,7 @@ export function forbidden(error:ErrorAPI, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 422 (Unprocessable Content).
  */
-export function invalid(error:ErrorAPI, init?:ResponseInit) {
+export function invalid(error: ErrorAPI, init?: ResponseInit) {
   return result(
     null,
     { side: "CL", description: null, ...error },
@@ -88,7 +90,7 @@ export function invalid(error:ErrorAPI, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 500 (Internal Server Error).
  */
-export function error(error:ErrorAPI, init?:ResponseInit) {
+export function error(error: ErrorAPI, init?: ResponseInit) {
   return result(
     null,
     { side: "SR", description: null, ...error },
@@ -102,6 +104,31 @@ export function error(error:ErrorAPI, init?:ResponseInit) {
  * Can take additional `init` or override them.
  * @returns A new JSON Response with an already set status code of 403 (Forbidden).
  */
-export function noperm(message?:string, init?:ResponseInit) {
-  return forbidden({ message: message ?? "You do not have permissions.", code: "NO-PERM" }, init);
+export function noperm(message?: string, init?: ResponseInit) {
+  return forbidden({ code: "NO-PERM", message: message ?? "You do not have permissions." }, init);
+}
+
+
+/**
+ * Creates a ready `Result` object with null `data` and defined (422) `error`.
+ * Can take additional `init` or override them. Much like the `invalid` function but more
+ * specialized into the errored zod parsings.
+ * @returns A new JSON Response with an already set status code of 422 (Unprocessable Content).
+ */
+export function badparse(error: ZodError, init?: ResponseInit) {
+  return invalid({ code: "ZOD", message: "Invalid input shape.", description: error.message }, init);
+}
+
+
+/**
+ * Creates a ready `Result` object with null `data` and defined (500) `error`.
+ * Can take additional `init` or override them. Much like the `error` function but more
+ * specialized into the errored database responses.
+ * @returns A new JSON Response with an already set status code of 500 (Internal Server Error).
+ */
+export function badquery(e:PostgrestError | AuthError, init?:ResponseInit) {
+  const details = (e as PostgrestError).details ? ` -- ${(e as PostgrestError).details}` : '';
+  return error(
+    { side:"DB", code:e.code, message:`Supabase error occurred.`, description:`[${e.name}]: ${e.message}${details}` }, init
+  );
 }
