@@ -1,4 +1,5 @@
-import type { JSON, OmitNever } from "../types";
+import type { JSON, OmitNever } from "$/utils/types";
+import type { SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
 export type Endpoints = OmitNever<{
@@ -52,14 +53,14 @@ type EndpointsMap = {
   "/auth/sign-in": {
     Method: 'POST';
     Params: undefined;
-    Args:   { email: string; password: string; };
+    Args:   SignInForm;
     Return: "OK";
   };
 
   "/auth/sign-up": {
     Method: 'POST';
     Params: undefined;
-    Args:   { username: string; email: string; password: string; };
+    Args:   SignUpForm;
     Return: "OK";
   };
 
