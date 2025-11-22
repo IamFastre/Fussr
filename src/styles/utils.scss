@@ -96,7 +96,15 @@
   @include height($value, $mode);
 }
 
-/* ============================== Screen Types ============================== */
+/* ============================= Content Mixins ============================= */
+
+@mixin is-rtl {
+  &:dir(rtl),
+  &:lang(ar), &:lang(he),
+  &:lang(yi), &:lang(ji),
+  &:lang(fa), &:lang(ku),
+  &:lang(ps), &:lang(ur) { @content; }
+}
 
 @mixin small-screen {
   @media /* small */ screen and (max-width: 786px) { @content; }

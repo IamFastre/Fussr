@@ -1,0 +1,27 @@
+:root[data-theme="default"] {
+  --xxx-theme-name:   "Default";
+  --xxx-theme-scheme: "dark";
+  --xxx-theme-assets: "light";
+
+  /*** COlORS ***/
+  // Monochrome
+  --fussr-color-primary:   #001005;
+  --fussr-color-secondary: #f1f1f1;
+  --fussr-color-tertiary:  #1f1f1f;
+  // Kaleidoscopic
+  --fussr-color-accent: #32e978;
+  --fussr-color-danger: #e93232;
+
+  /*** VALUES ***/
+  // Safe Area
+  --fussr-value-safe-inset-top:    env(safe-area-inset-top);
+  --fussr-value-safe-inset-left:   env(safe-area-inset-left);
+  --fussr-value-safe-inset-bottom: env(safe-area-inset-bottom);
+  --fussr-value-safe-inset-right:  env(safe-area-inset-right);
+  // Radii
+  --fussr-value-radius-min: min(0dvh,  0dvw  );
+  --fussr-value-radius-1:    5px;
+  --fussr-value-radius-2:   10px;
+  --fussr-value-radius-3:   25px;
+  --fussr-value-radius-max: max(100dvh, 100dvw);
+}
