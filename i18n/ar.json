@@ -7,7 +7,7 @@
   "auth_got_an_account": "ألديك حساب بالفعل؟",
   "auth_got_no_account": "ليس لديك حساب؟",
   "auth_password": "كلمة السر",
-  "auth_password_placeholder": "8 أحرف و أرقام أو أكثر",
+  "auth_password_placeholder": "8 حروف و أرقام أو أكثر",
   "auth_sign_in": "سجل الدخول",
   "auth_sign_up": "سجل حساب جديد",
   "auth_signing_in": "تسجيل الدخول",
@@ -16,5 +16,11 @@
   "footer_rights_reserved": "جميع الحقوق محفوظة",
   "fussr": "فسّر",
   "welcome": "مرحبًا بك في {name}!",
-  "language": "اللغة"
+  "language": "اللغة",
+  "auth_username": "اسم المستخدم",
+  "auth_username_placeholder": "john-doe",
+  "auth_error_too_small": "يجب أن يكون {minimum} على الأقل.",
+  "auth_error_too_big": "يجب أن يكون {maximum} كحد أقصى.",
+  "auth_error_invalid_format": "نمط خاطئ، يجب أن يتبع النمط: {pattern}.",
+  "auth_error_invalid_email": "بريد إلكتروني غير صالح."
 }

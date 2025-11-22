@@ -9,6 +9,7 @@
 .content {
   flex-wrap: wrap;
   justify-content: center;
+  min-height: fit-content;
   gap: 20px;
   margin: 20px;
 
@@ -46,10 +47,20 @@
       }
     }
 
+    .titchy.input-wrapper {
+      .symbol svg {
+        color: C(accent);
+      }
+    }
+
     .label-content {
       flex-direction: row;
       align-items: center;
       gap: 1ch;
+
+      > svg {
+        color: C(accent);
+      }
     }
 
     .error {
