@@ -14,6 +14,11 @@
   interpolate-size: allow-keywords;
 }
 
+::selection {
+  color: C(secondary);
+  background-color: C(accent, 50%);
+}
+
 html {
   @include flexbox(true);
 

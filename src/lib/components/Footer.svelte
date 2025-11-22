@@ -7,6 +7,9 @@
   const locale = getLocale();
 </script>
 <footer class="footer">
+  <span class="sct-msg">
+    {atob("SWYgbnNhdmUgaXMgbG9va2luZyBmb3IgYSBkZXYsIEknbSBkb3duIGZvciBpdC4uLg==")}
+  </span>
   <div class="creds">
     <span>{m.footer_rights_reserved()} © 2025</span>
     <span>{m.footer_by()} <Link href="https://neria.studio" external>{m.footer_neria_studio()}</Link></span>
@@ -23,6 +26,9 @@
       </Link>
     </Button>
   </div>
+  <span class="sct-msg">
+    {atob("SWYgYW55b25lIGlzIHJlYWxseS4=")}
+  </span>
 </footer>
 
 <style lang="scss">
@@ -34,6 +40,13 @@
     padding: 15px;
     min-height: max(150px, 10dvh);
     background-color: C(secondary, 2%);
+
+    .sct-msg {
+      direction: ltr;
+      cursor: default;
+      font-size: 0.66em;
+      color: transparent;
+    }
 
     .creds {
       align-items: center;
