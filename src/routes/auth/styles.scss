@@ -53,6 +53,23 @@
       }
     }
 
+    .success {
+      gap: 5px;
+
+      h2 {
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5ch;
+        color: C(accent);
+
+        svg {
+          @include size(1em);
+          stroke-width: 2.5px;
+        }
+      }
+    }
+
     .label-content {
       flex-direction: row;
       align-items: center;
@@ -72,6 +89,10 @@
       font-size: 0.8em;
 
       > svg { @include size(1.5em); }
+    }
+
+    .titchy.button.submit {
+      align-items: center;
     }
 
     .link {

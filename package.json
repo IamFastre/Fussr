@@ -37,7 +37,7 @@
 		"@tanstack/svelte-query": "^6.0.8",
 		"dayjs": "^1.11.19",
 		"lodash": "^4.17.21",
-		"titchy": "^0.0.35",
+		"titchy": "^0.0.36",
 		"zod": "^4.1.12"
 	}
 }

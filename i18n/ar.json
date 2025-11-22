@@ -22,5 +22,10 @@
   "auth_error_too_small": "يجب أن يكون {minimum} على الأقل.",
   "auth_error_too_big": "يجب أن يكون {maximum} كحد أقصى.",
   "auth_error_invalid_format": "نمط خاطئ، يجب أن يتبع النمط: {pattern}.",
-  "auth_error_invalid_email": "بريد إلكتروني غير صالح."
+  "auth_error_invalid_email": "بريد إلكتروني غير صالح.",
+  "auth_error_invalid_credentials": "البيانات المدخلة غير صحيحة.",
+  "go_to": "اذهب إلى",
+  "home_page": "الصفحة الرئيسية",
+  "auth_check_inbox": "يرجى التحقق من صندوق بريدك الإلكتروني.",
+  "auth_sign_up_success": "تم بنجاح!"
 }
