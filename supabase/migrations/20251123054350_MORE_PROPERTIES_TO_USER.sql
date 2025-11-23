@@ -34,7 +34,7 @@ BEGIN
   uname := NEW.raw_user_meta_data->>'username';
 
   INSERT INTO public.users
-    ("uuid", "username", "display_name")
+    ("uuid", "username", "avatar")
   VALUES
     (
       NEW.id,
