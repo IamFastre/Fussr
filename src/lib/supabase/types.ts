@@ -41,17 +41,26 @@ export type Database = {
     Tables: {
       users: {
         Row: {
+          avatar: string
+          bio: string | null
           created_at: string
+          display_name: string | null
           username: string
           uuid: string
         }
         Insert: {
+          avatar: string
+          bio?: string | null
           created_at?: string
+          display_name?: string | null
           username: string
           uuid: string
         }
         Update: {
+          avatar?: string
+          bio?: string | null
           created_at?: string
+          display_name?: string | null
           username?: string
           uuid?: string
         }
