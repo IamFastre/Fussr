@@ -54,21 +54,13 @@ const supabase: Handle = async ({ event, resolve }) => {
   // Suppress the annoying warning for `getSession`, I have no hand in this.
   event.locals.supabase.anon.auth['suppressGetSessionWarning'] = true;
 
-  // Since user can logout, you wanna make sure he's sill signed in.
-  event.locals.safeGetSession = async () => {
-    const { data: { session } } = await event.locals.supabase.anon.auth.getSession();
+  const { data: { user    } } = await event.locals.supabase.anon.auth.getUser();
+  const { data: { session } } = await event.locals.supabase.anon.auth.getSession();
 
-    if (!session)
-      return { session: null, user: null };
-
-    const { data: { user }, error } = await event.locals.supabase.anon.auth.getUser();
-
-    // Nullify the user if JWT validation fails
-    if (error)
-      return { session: null, user: null };
-
-    return { session, user };
-  };
+  event.locals.auth = { }  as typeof event.locals.auth;
+  event.locals.auth.user     = user;
+  event.locals.auth.session  = user ? session : null;
+  event.locals.auth.isSigned = !!user && !!session;
 
   return resolve(event, {
     // Pass `content-range` and `x-supabase-api-version` to Supabase.
@@ -79,23 +71,18 @@ const supabase: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-  const { session, user } = await event.locals.safeGetSession();
-
-  event.locals.session = session;
-  event.locals.user    = user;
-
   // Suppress the `.well-known` shit.
   // No, Chrome, it's not well-known.
   if (event.url.pathname.startsWith( '/.well-known/appspecific'))
     return new Response(null, { status: 204 });
 
-  const hasSession   = !!event.locals.session;
+  const isSigned     = !!event.locals.auth.isSigned;
   const requiresAuth = !isAuthless(event.url.pathname);
 
   // If the user has no Supabase session (i.e logged in)
   // And the directory requires auth,
   // redirect them to the auth page
-  if (!hasSession && requiresAuth)
+  if (!isSigned && requiresAuth)
     redirect(303, '/auth');
 
   return resolve(event);

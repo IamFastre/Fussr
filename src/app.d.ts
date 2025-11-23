@@ -3,20 +3,26 @@ import type { Session, SupabaseClient, User } from '@supabase/supabase-js';
 
 // See https://svelte.dev/docs/kit/types#app.d.ts
 
+type AuthData = {
+  isSigned: boolean;
+  session:  Session | null;
+  user:     User | null;
+};
+
+type Supabase = {
+  anon:  SupabaseClient<Database>;
+  admin: SupabaseClient<Database>;
+};
+
 declare global {
   namespace App {
     interface PageData {
-			session: Session | null;
+      auth: AuthData;
 		}
 
 		interface Locals {
-      safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
-      session: Session | null;
-      user: User | null;
-      supabase: {
-        anon: SupabaseClient<Database>;
-        admin: SupabaseClient<Database>;
-      };
+      auth: AuthData;
+      supabase: Supabase;
     }
 
 		// interface Error {}

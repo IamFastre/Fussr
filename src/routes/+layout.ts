@@ -4,10 +4,10 @@ import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ss
 import type { Database } from '$/supabase/types';
 import type { LayoutLoad } from './$types';
 
-export const load:LayoutLoad = async ({ data, depends, fetch }) => {
+export const load: LayoutLoad = async ({ data, depends, fetch }) => {
   depends('supabase:auth');
 
-  // Defining both the server and browser clients accordingly
+  // Defining either the server or browser clients accordingly
   const supabase = isBrowser()
     ? createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
       global: { fetch },
@@ -17,10 +17,16 @@ export const load:LayoutLoad = async ({ data, depends, fetch }) => {
       cookies: { getAll: () => data.cookies },
     });
 
-  const { data:{ session } } = await supabase.auth.getSession();
+  const [session, user] = await Promise.all([
+    supabase.auth.getSession().then(s => s.data.session),
+    supabase.auth.getUser().then(s => s.data.user),
+  ]);
 
   return {
-    supabase,
-    session,
+    auth: {
+      isSigned: !!user,
+      user:     user,
+      session:  user ? session : null,
+    }
   };
 };
