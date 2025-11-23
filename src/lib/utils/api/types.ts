@@ -56,6 +56,13 @@ type EndpointsMap = {
     Return: "OK";
   };
 
+  "/auth/sign-out": {
+    Method: 'POST';
+    Params: undefined;
+    Args:   undefined;
+    Return: "OK";
+  };
+
   "/auth/recovery": {
     Method: 'POST';
     Params: undefined;

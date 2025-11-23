@@ -2,8 +2,14 @@
   import { ButtonGroup, Button, Panel, Link } from "titchy";
 
   import { m } from "@/paraglide/messages";
+  import { api } from "$/client/api";
 
   const { data } = $props();
+
+  const onSignOut = async () => {
+    await api({ method:'POST', path:'/auth/sign-out' });
+    location.reload();
+  };
 </script>
 
 <div class="hello">
@@ -18,6 +24,9 @@
             {m.routes_me()}
           </Button>
         </Link>
+        <Button onclick={onSignOut}>
+          {m.auth_sign_out()}
+        </Button>
       {:else}
         <Link variant="wrapper" href="/auth/sign-in">
           <Button>
