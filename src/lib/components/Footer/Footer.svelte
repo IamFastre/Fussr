@@ -35,9 +35,10 @@
   @use "@/styles/utils.scss" as *;
 
   .footer {
+    $p: 15px;
     @include flex-center();
-    gap: 15px;
-    padding: 15px;
+    gap: $p;
+    padding: $p;
     min-height: max(150px, 10dvh);
     background-color: C(secondary, 2%);
 
@@ -57,6 +58,10 @@
       align-items: center;
       gap: 1.5ch;
       font-size: 0.85em;
+    }
+
+    @include small-screen {
+      padding-bottom: calc(2 * $p + V(safe-inset-bottom) + V(navbar-small-height));
     }
   }
 </style>

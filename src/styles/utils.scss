@@ -63,12 +63,12 @@
 
 /* ============================== Theme Methods ============================= */
 
-@function C($name, $alpha: 100%) {
+@function C($name, $alpha: 100%, $opaque: false) {
   /* Red fallback to scream at me that I misspelled the color name */
   $color: var(--fussr-color-#{$name}, red);
 
   @if $alpha == 100% { @return $color; }
-  @else              { @return set-alpha($color, $alpha); }
+  @else              { @return set-alpha($color, $alpha, $opaque); }
 }
 
 @function V($name) {
