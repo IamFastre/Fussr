@@ -30,5 +30,9 @@
   "auth_sign_up_success": "تم بنجاح!",
   "auth_account_recovery": "إستعادة الحساب",
   "auth_suddenly_remembered": "تذكرت فجأة؟",
-  "auth_send_recovery_mail": "أرسل رابط الإستعادة"
+  "auth_send_recovery_mail": "أرسل رابط الإستعادة",
+  "routes_home": "رئيسي",
+  "routes_me": "حسابي",
+  "routes_settings": "الإعدادات",
+  "routes_about": "عنّا"
 }
