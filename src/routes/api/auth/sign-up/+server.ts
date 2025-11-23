@@ -15,7 +15,7 @@ export const POST: RequestHandler = async ({ url, request, locals:{ supabase } }
     password: input.data.password,
     options: {
       data:{ username:input.data.username },
-      emailRedirectTo: url.origin + '/me'
+      emailRedirectTo: url.origin + '/auth/confirm'
     }
   });
 
