@@ -18,6 +18,5 @@ export const POST: RequestHandler = async ({ request, locals:{ supabase } }) => 
 
   if (auth.error)
     return badquery(auth.error);
-
   return success("OK");
 };

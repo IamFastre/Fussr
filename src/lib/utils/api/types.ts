@@ -1,5 +1,5 @@
 import type { JSON, OmitNever } from "$/utils/types";
-import type { SignInForm, SignUpForm } from "$/utils/zod/forms";
+import type { RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
 export type Endpoints = OmitNever<{
@@ -32,17 +32,9 @@ export interface Endpoint<
 }
 
 type EndpointsMap = {
-  /* ======================================================================== */
-
-  "~template~": {
-    Method: 'GET';
-    Params: undefined;
-    Args:   undefined;
-    Return: Endpoint['Method'];
-  };
-
   /* ================================= Auth ================================= */
 
+  // This is to just shut client `api` function
   "/auth": {
     Method: 'GET';
     Params: undefined;
@@ -61,6 +53,13 @@ type EndpointsMap = {
     Method: 'POST';
     Params: undefined;
     Args:   SignUpForm;
+    Return: "OK";
+  };
+
+  "/auth/recovery": {
+    Method: 'POST';
+    Params: undefined;
+    Args:   RecoveryForm;
     Return: "OK";
   };
 

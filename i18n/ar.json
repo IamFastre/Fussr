@@ -27,5 +27,8 @@
   "go_to": "اذهب إلى",
   "home_page": "الصفحة الرئيسية",
   "auth_check_inbox": "يرجى التحقق من صندوق بريدك الإلكتروني.",
-  "auth_sign_up_success": "تم بنجاح!"
+  "auth_sign_up_success": "تم بنجاح!",
+  "auth_account_recovery": "إستعادة الحساب",
+  "auth_suddenly_remembered": "تذكرت فجأة؟",
+  "auth_send_recovery_mail": "أرسل رابط الإستعادة"
 }
