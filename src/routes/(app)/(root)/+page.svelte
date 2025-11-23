@@ -1,17 +1,24 @@
 <script lang="ts">
-  import { ButtonGroup, Button, Panel, Screen, Link } from "titchy";
+  import { ButtonGroup, Button, Panel, Link } from "titchy";
 
   import { m } from "@/paraglide/messages";
-  import { Footer } from "$/components";
+
+  const { data } = $props();
 </script>
 
-<Screen>
-  <div class="hello">
-    <Panel class="hi" centered>
-      <span>
-        {m.welcome({ name:m.fussr() })}
-      </span>
-      <ButtonGroup class="group">
+<div class="hello">
+  <Panel class="hi" centered>
+    <span>
+      {m.welcome({ name:m.fussr() })}
+    </span>
+    <ButtonGroup class="group">
+      {#if data.auth.isSigned}
+        <Link variant="wrapper" href="/me">
+          <Button>
+            {m.routes_me()}
+          </Button>
+        </Link>
+      {:else}
         <Link variant="wrapper" href="/auth/sign-in">
           <Button>
             {m.auth_sign_in()}
@@ -22,12 +29,10 @@
             {m.auth_sign_up()}
           </Button>
         </Link>
-      </ButtonGroup>
-    </Panel>
-  </div>
-</Screen>
-
-<Footer />
+      {/if}
+    </ButtonGroup>
+  </Panel>
+</div>
 
 <style lang="scss">
   @use "@/styles/utils.scss" as *;

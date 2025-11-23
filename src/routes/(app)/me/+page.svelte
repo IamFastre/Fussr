@@ -1,17 +1,9 @@
 <script lang="ts">
-  import { Screen } from "titchy";
-
-  import { m } from "@/paraglide/messages";
-  import { Footer } from "$/components";
 </script>
 
-<Screen expandable>
-  <div class="me">
-    ME
-  </div>
-</Screen>
-
-<Footer />
+<div class="me">
+  ME
+</div>
 
 <style lang="scss">
   @use "@/styles/utils.scss" as *;

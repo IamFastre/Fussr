@@ -24,4 +24,9 @@
   --fussr-value-radius-2:   10px;
   --fussr-value-radius-3:   25px;
   --fussr-value-radius-max: max(100dvh, 100dvw);
+  // Consts
+  --fussr-value-navbar-small-width: auto;
+  --fussr-value-navbar-small-height: 75px;
+  --fussr-value-navbar-wide-width: min(20dvw, 200px);
+  --fussr-value-navbar-wide-height: auto;
 }
