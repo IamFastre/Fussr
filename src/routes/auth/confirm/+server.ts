@@ -9,7 +9,7 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 
   const redirectTo = new URL(url);
 
-  redirectTo.pathname = "/me";
+  redirectTo.pathname = type === 'recovery' ? '/me/manage' : '/me';
   redirectTo.searchParams.delete('token_hash');
   redirectTo.searchParams.delete('type');
 

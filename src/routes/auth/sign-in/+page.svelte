@@ -11,7 +11,6 @@
   let email    = $state("");
   let password = $state("");
 
-
   let emailErrors    = $state<string[]>([]);
   let passwordErrors = $state<string[]>([]);
 
@@ -77,7 +76,7 @@
     <span>{m.auth_password()}</span>
     <div style:flex="1"></div>
     <small>
-      <Link href="/auth/recovery?email={email}">{m.auth_forgot_password()}</Link>
+      <Link href="/auth/recovery{email ? `?email=${email}` : ""}">{m.auth_forgot_password()}</Link>
     </small>
   </div>
   <InputWrapper side-actions={{ hidable:'always' }}>
