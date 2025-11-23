@@ -60,6 +60,8 @@
           )
       }
     }
+
+    loading = false;
   };
 </script>
 

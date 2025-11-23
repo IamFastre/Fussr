@@ -3,9 +3,8 @@ import { SignUpForm } from '$/utils/zod/forms';
 
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request, locals:{ supabase } }) => {
+export const POST: RequestHandler = async ({ url, request, locals:{ supabase } }) => {
   const body = await request.json();
-
   const input = SignUpForm.safeParse(body);
 
   if (!input.success)
@@ -14,7 +13,10 @@ export const POST: RequestHandler = async ({ request, locals:{ supabase } }) => 
   const auth = await supabase.anon.auth.signUp({
     email: input.data.email,
     password: input.data.password,
-    options: { data:{ username:input.data.username } }
+    options: {
+      data:{ username:input.data.username },
+      emailRedirectTo: url.origin + '/me'
+    }
   });
 
   if (auth.error)
