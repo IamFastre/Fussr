@@ -2,7 +2,7 @@
   import { PUBLIC_NAME } from "$env/static/public";
   import { m } from "@/paraglide/messages";
   import type { HTMLAttributes } from "svelte/elements";
-  import { Link, Separator } from "titchy";
+  import { Button, Link, Separator } from "titchy";
   import type { Route } from "./types";
   import { page } from "$app/state";
 
@@ -26,6 +26,7 @@
       alt="{PUBLIC_NAME}'s logo"
     />
   </Link>
+
   <div class="routes">
     {#each routes as route, i (i)}
       {#if !route.hidden}
@@ -43,6 +44,7 @@
       {/if}
     {/each}
   </div>
+
   <span class="version">
     v0.0.1
   </span>
@@ -52,19 +54,14 @@
 <style lang="scss">
   @use "@/styles/utils.scss" as *;
 
-  :global {
-    .titchy.screen.nav-holder {
-      @include small-screen { flex-direction: column; }
-      @include wide-screen  { flex-direction: row;    }
-    }
-  }
-
   .navbar {
     @include width(V(navbar-wide-width));
     @include height(V(navbar-wide-height));
+
+    // background-color: C(secondary, 5%);
+    // backdrop-filter: blur(10px);
     background-color: mix(C(secondary) 5%, C(primary));
     padding: 10px;
-    margin: 10px;
     gap: 10px;
     border-radius: 10px;
 
@@ -137,11 +134,13 @@
       @include height(V(navbar-small-height));
 
       position: fixed;
-      z-index: 100;
       bottom: V(safe-inset-bottom);
       left: 0;
       right: 0;
+      z-index: 100;
+
       flex-direction: row;
+      margin: 10px;
 
       :global {
         .titchy.link.home-link {

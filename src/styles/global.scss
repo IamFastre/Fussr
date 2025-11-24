@@ -73,6 +73,10 @@ a:where([data-variant=wrapper]) {
 /* ========================================================================== */
 
 .titchy {
-  --titchy-color-primary: var(--fussr-color-primary);
-  --titchy-color-accent: var(--fussr-color-accent);
+  --titchy-color-primary:   var(--fussr-color-primary);
+  --titchy-color-secondary: var(--fussr-color-secondary);
+  --titchy-color-tertiary:  var(--fussr-color-tertiary);
+
+  --titchy-color-accent:    var(--fussr-color-accent);
+  --titchy-color-danger:    var(--fussr-color-danger);
 }
