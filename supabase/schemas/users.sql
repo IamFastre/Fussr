@@ -2,7 +2,7 @@
 
 CREATE TABLE public.users (
   -- Properties --
-  "uuid" UUID NOT NULL,
+  "uuid" UUID NOT NULL UNIQUE,
   "username" TEXT NOT NULL UNIQUE,
   "display_name" TEXT NULL,
   "bio" TEXT NULL,

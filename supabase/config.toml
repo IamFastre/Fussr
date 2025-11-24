@@ -54,7 +54,8 @@ enabled = true
 # Specifies an ordered list of schema files that describe your database.
 # Supports glob patterns relative to supabase directory: "./schemas/*.sql"
 schema_paths = [
-  # "./schemas/main.sql",
+  "./schemas/users.sql",
+  "./schemas/questions.sql",
   # "./schemas/*.sql",
 ]
 
