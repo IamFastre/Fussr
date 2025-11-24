@@ -2,13 +2,14 @@
 
 CREATE TABLE public.questions (
   -- Properties --
-  "uuid" UUID NOT NULL,
+  "uuid" UUID NOT NULL DEFAULT GEN_RANDOM_UUID(),
   "title" TEXT NOT NULL,
   "body" TEXT NOT NULL,
   "tags" TEXT[6] NOT NULL,
   "user" UUID NOT NULL,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   -- Constrains --
+  CONSTRAINT questions_pkey PRIMARY KEY ("uuid"),
   CONSTRAINT questions_user_fkey FOREIGN KEY ("user") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE
 );
 

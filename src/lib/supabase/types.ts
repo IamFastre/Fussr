@@ -39,6 +39,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      questions: {
+        Row: {
+          body: string
+          created_at: string
+          tags: string[]
+          title: string
+          user: string
+          uuid: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          tags: string[]
+          title: string
+          user: string
+          uuid?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          tags?: string[]
+          title?: string
+          user?: string
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
       users: {
         Row: {
           avatar: string
