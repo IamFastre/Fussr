@@ -35,5 +35,16 @@
   "routes_home": "Home",
   "routes_me": "Me",
   "routes_settings": "Settings",
-  "welcome": "Welcome to {name}!"
+  "welcome": "Welcome to {name}!",
+  "ask_ask_question": "Ask a question",
+  "ask_title_placeholder": "Describe your problem briefly.",
+  "ask_title": "Title",
+  "ask_body": "Body",
+  "ask_body_placeholder": "Give every detail you can give about the problem. (min 160)",
+  "ask_tags": "Tags",
+  "ask_tags_description": "Categorize your question by adding upto 6 tags.",
+  "ask_tags_empty": "No tags selected.",
+  "ask_tags_placeholder": "eg. react, nextjs, c-sharp or linux.",
+  "ask_submit": "Submit",
+  "ask_draft": "Draft"
 }

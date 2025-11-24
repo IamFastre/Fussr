@@ -35,5 +35,16 @@
   "routes_home": "رئيسي",
   "routes_me": "حسابي",
   "routes_settings": "الإعدادات",
-  "welcome": "مرحبًا بك في {name}!"
+  "welcome": "مرحبًا بك في {name}!",
+  "ask_ask_question": "أطرح سؤالك",
+  "ask_title_placeholder": "أوصف أوصف مشكلتك بشكل مختصر.",
+  "ask_title": "العنوان",
+  "ask_body": "نص السؤال",
+  "ask_body_placeholder": "أوصف مشكلتك بشكل مكثف و مفصل. (160 حرف على الأقل)",
+  "ask_tags_placeholder": "مثال: react أو nextjs أو c-sharp أو linux.",
+  "ask_submit": "أرسل",
+  "ask_tags": "مواضيع",
+  "ask_tags_empty": "لم يتم إختيار أي موضوع للآن.",
+  "ask_tags_description": "صنّف سؤالك بإضافة ما يصل إلى 6 مواضيع.",
+  "ask_draft": "أضف للمسودة"
 }

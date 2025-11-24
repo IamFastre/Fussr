@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Archive, Ban, Plus, X } from "@lucide/svelte";
   import { scale } from "svelte/transition";
   import { Button, Input, InputWrapper, Label, Panel, Separator, Textarea } from "titchy";
+  import { Archive, Ban, Plus, X } from "@lucide/svelte";
+
+  import { m } from "@/paraglide/messages";
 
   let titleInput = $state<string>("");
   let bodyInput  = $state<string>("");
@@ -33,34 +35,36 @@
 <div class="ask">
   <div class="form">
     <Panel>
-      <h2>Ask a question</h2>
+      <h2>
+        {m.ask_ask_question()}
+      </h2>
       <Label for="title">
-        <InputWrapper label="Title">
+        <InputWrapper label={m.ask_title()}>
           <Input
             bind:value={titleInput}
             id="title"
-            placeholder="Describe your problem briefly."
+            placeholder={m.ask_title_placeholder()}
           />
         </InputWrapper>
       </Label>
 
       <Label for="body">
         <InputWrapper
-          label="Body"
+          label={m.ask_body()}
           side-actions={{ clearable:'always', pastable:'hover' }}
         >
           <Textarea
             bind:value={bodyInput}
             id="body"
-            placeholder="Give every detail you can give about the problem."
+            placeholder={m.ask_body_placeholder()}
           />
         </InputWrapper>
       </Label>
 
       <Label class="tags-label" for="tags">
         <Panel variant="secondary">
-          <span class="label-title">Tags</span>
-          <span class="label-desc">Categorize your question by adding upto 6 tags.</span>
+          <span class="label-title">{m.ask_tags()}</span>
+          <span class="label-desc">{m.ask_tags_description()}</span>
           <div class="tag-array">
             {#each tags as tag, i (i)}
               <div transition:scale>
@@ -72,7 +76,7 @@
             {:else}
               <div class="no-tag">
                 <Ban />
-                <span>No tags selected.</span>
+                <span>{m.ask_tags_empty()}</span>
               </div>
             {/each}
             {#if tags.length}
@@ -86,7 +90,7 @@
             <Input
               bind:value={tagInput}
               id="tags"
-              placeholder="eg. react, nextjs, c-sharp or linux."
+              placeholder={m.ask_tags_placeholder()}
               disabled={tags.length >= 6}
               onkeydown={e => {
                 if (e.key === 'Enter')
@@ -108,12 +112,12 @@
 
       <div class="actions">
         <Button class="big" scaling={false}>
-          Submit
+          {m.ask_submit()}
         </Button>
         <Button class="small" variant="secondary" scaling={false}>
           <Archive />
           <span class="title">
-            Draft
+            {m.ask_draft()}
           </span>
         </Button>
       </div>
@@ -127,6 +131,9 @@
   .ask {
     .form {
       @include wide-screen { margin: 0 7.5%; }
+
+      h2 { align-self: center; margin: 15px 0; }
+
       :global
       .titchy.label {
         .label-title {
@@ -213,6 +220,7 @@
               opacity: 0;
               width: 0;
               margin-inline-start: calc(-1 * $g);
+              white-space: nowrap;
             }
 
             &:hover {
