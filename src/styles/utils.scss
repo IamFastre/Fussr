@@ -15,11 +15,15 @@
   @if $defaults { @include default(); }
 }
 
-@mixin flexbox($reset: false, $direction: column) {
+@mixin flexbox($reset: false, $direction: column, $align: stretch, $justify: flex-start, $gap: normal, $wrap: nowrap) {
   @if $reset { @include reset(); }
 
   display: flex;
   flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  flex-wrap: $wrap;
+  gap: $gap;
 }
 
 @mixin flex-center() {

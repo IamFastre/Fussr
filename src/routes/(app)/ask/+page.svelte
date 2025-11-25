@@ -1,15 +1,21 @@
 <script lang="ts">
   import { scale } from "svelte/transition";
-  import { Button, Input, InputWrapper, Label, Panel, Separator, Textarea } from "titchy";
-  import { Archive, Ban, Plus, X } from "@lucide/svelte";
+  import { Button, Input, InputWrapper, Label, Panel, Separator, Textarea, useToaster } from "titchy";
+  import { Archive, Ban, CircleQuestionMark, Plus, X } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
+  import { api } from "$/client/api";
+  import { QuestionForm } from "$/utils/zod/forms";
+  import { goto } from "$app/navigation";
+
+  const toaster = useToaster();
 
   let titleInput = $state<string>("");
   let bodyInput  = $state<string>("");
   let tagInput   = $state<string>("");
 
-  let tags = $state<string[]>([]);
+  let loading = $state(false);
+  let tags    = $state<string[]>([]);
 
   const addTag = () => {
     const tagsToAdd = tagInput.split(/,\s*/).map(t => t.trim());
@@ -30,12 +36,35 @@
   const remTag = (tag: string) => () => {
     tags = tags.filter(t => t !== tag);
   };
+
+  const onSubmit = async () => {
+    loading = true;
+    const { success, data, error } = QuestionForm.safeParse({ title: titleInput, body: bodyInput, tags });
+
+    if (success) {
+      const res = await api({ method:'POST', path:'/questions/ask', args:data });
+
+      if (res.data)
+        goto(`/questions/${res.data.uuid}`);
+      else
+        toaster.add({ type: 'error', content: m.generic_error_occurred() });
+    }
+
+    else {
+      // TODO: add proper errors like in auth pages
+      toaster.add({ type: 'error', content: m.generic_error_occurred() });
+      console.log(error);
+    }
+
+    loading = false;
+  };
 </script>
 
 <div class="ask">
   <div class="form">
     <Panel>
       <h2>
+        <CircleQuestionMark />
         {m.ask_ask_question()}
       </h2>
       <Label for="title">
@@ -44,6 +73,7 @@
             bind:value={titleInput}
             id="title"
             placeholder={m.ask_title_placeholder()}
+            disabled={loading}
           />
         </InputWrapper>
       </Label>
@@ -57,18 +87,19 @@
             bind:value={bodyInput}
             id="body"
             placeholder={m.ask_body_placeholder()}
+            disabled={loading}
           />
         </InputWrapper>
       </Label>
 
-      <Label class="tags-label" for="tags">
+      <Label class={["tags-label", { disabled:loading }]} for="tags">
         <Panel variant="secondary">
           <span class="label-title">{m.ask_tags()}</span>
           <span class="label-desc">{m.ask_tags_description()}</span>
           <div class="tag-array">
             {#each tags as tag, i (i)}
               <div transition:scale>
-                <Button class="tag" variant="wrapper" onclick={remTag(tag)}>
+                <Button class="tag" variant="wrapper" onclick={remTag(tag)} disabled={loading}>
                   <span>#{tag}</span>
                   <X />
                 </Button>
@@ -81,7 +112,7 @@
             {/each}
             {#if tags.length}
               <div class="sep"></div>
-              <Button variant="wrapper" onclick={() => tags = []}>
+              <Button variant="wrapper" onclick={() => tags = []} disabled={loading}>
                 <X />
               </Button>
             {/if}
@@ -91,7 +122,7 @@
               bind:value={tagInput}
               id="tags"
               placeholder={m.ask_tags_placeholder()}
-              disabled={tags.length >= 6}
+              disabled={tags.length >= 6 || loading}
               onkeydown={e => {
                 if (e.key === 'Enter')
                   addTag()
@@ -101,7 +132,7 @@
                   else remTag(tags[tags.length - 1])()
               }}
             />
-            <Button onclick={addTag} disabled={tags.length >= 6}>
+            <Button onclick={addTag} disabled={tags.length >= 6 || loading}>
               <Plus />
             </Button>
           </div>
@@ -111,10 +142,10 @@
       <Separator variant="secondary" />
 
       <div class="actions">
-        <Button class="big" scaling={false}>
+        <Button class="big" scaling={false} onclick={onSubmit} disabled={loading}>
           {m.ask_submit()}
         </Button>
-        <Button class="small" variant="secondary" scaling={false}>
+        <Button class="small" variant="secondary" scaling={false} disabled={loading}>
           <Archive />
           <span class="title">
             {m.ask_draft()}
@@ -132,7 +163,12 @@
     .form {
       @include wide-screen { margin: 0 7.5%; }
 
-      h2 { align-self: center; margin: 15px 0; }
+      h2 {
+        @include flexbox(false, row, center, $gap: 15px);
+        margin: 15px 0;
+
+        :global svg { @include size(1.2em); color: C(accent); }
+      }
 
       :global
       .titchy.label {
@@ -161,6 +197,8 @@
         }
 
         &.tags-label {
+          &.disabled { opacity: 0.5; }
+
           .tag-array {
             font-size: smaller;
             gap: 7.5px;
