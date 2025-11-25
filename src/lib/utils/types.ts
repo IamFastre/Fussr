@@ -1,3 +1,5 @@
+import type { Tables } from "$/supabase/types";
+
 /* ========================================================================== */
 /*                                   Generic                                  */
 /* ========================================================================== */
@@ -53,3 +55,16 @@ export type ResultAPI<T> = (
   { data: T;    error: null;     } |
   { data: null; error: ErrorAPI; }
 );
+
+/* ========================================================================== */
+/*                              Supabase Related                              */
+/* ========================================================================== */
+
+export type Question = {
+  uuid:       Tables<'questions'>['uuid'];
+  title:      Tables<'questions'>['title'];
+  body:       Tables<'questions'>['body'];
+  tags:       Tables<'questions'>['tags'];
+  user:       Tables<'questions'>['user'];
+  created_at: Tables<'questions'>['created_at'];
+}

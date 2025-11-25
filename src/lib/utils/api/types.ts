@@ -1,5 +1,5 @@
-import type { JSON, OmitNever } from "$/utils/types";
-import type { RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
+import type { JSON, OmitNever, Question } from "$/utils/types";
+import type { QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
 export type Endpoints = OmitNever<{
@@ -68,6 +68,15 @@ type EndpointsMap = {
     Params: undefined;
     Args:   RecoveryForm;
     Return: "OK";
+  };
+
+  /* ======================================================================== */
+
+  "/questions/ask": {
+    Method: 'POST';
+    Params: undefined;
+    Args:   QuestionForm;
+    Return: Question;
   };
 
   /* ======================================================================== */

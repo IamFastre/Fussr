@@ -46,3 +46,24 @@ export type RecoveryForm = z.infer<typeof RecoveryForm>;
 export const RecoveryForm = z.object({
   email: EmailShape,
 });
+
+/* ========================================================================== */
+/* ========================================================================== */
+/* ========================================================================== */
+
+export type QuestionForm = z.infer<typeof QuestionForm>;
+
+export const QuestionForm = z.object({
+  title: z.string()
+    .min(16).max(160)
+    .trim(),
+  body: z.string()
+    .min(160).max(2000)
+    .trim(),
+  tags: z.array(
+    z.string()
+      .min(2).max(35)
+      .regex(/^[a-z0-9-]+$/)
+      .trim()
+  ),
+});
