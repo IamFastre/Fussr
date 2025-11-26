@@ -54,8 +54,9 @@
       @include small-screen { flex-direction: column; }
       @include wide-screen  { flex-direction: row;    }
 
-      .content {
+      > .content {
         flex: 1;
+        gap: 10px;
 
         @include small-screen { padding: 0;      }
         @include wide-screen  { padding: 0 10px; }
