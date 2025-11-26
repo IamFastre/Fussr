@@ -12,7 +12,7 @@ export async function askQuestion(question: QuestionForm) {
     return null;
 
   const res = await supabase.admin
-    .from("questions")
+    .from('questions')
     .insert({ ...data, user:auth.user.id })
     .select('*')
     .maybeSingle();

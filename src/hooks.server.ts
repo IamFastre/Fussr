@@ -17,6 +17,7 @@ const AUTHLESS_DIRECTORIES = [
 
   '/api/auth/?.*',
   '/api/other/ping',
+  '/api/users/[a-z0-9._-]+',
 ];
 
 const isAuthless = (dir: string) => {
