@@ -11,7 +11,7 @@ import type { ZodError } from "zod";
  * @returns A new JSON Response.
  */
 export function result<T extends JSON | object>(data: T | null, error: Without<Required<ErrorAPI>, 'code'> & { code?:ErrorAPI['code'] } | null, init: ResponseInit) {
-  const res = { data, error:  sort(error) } as ResultAPI<T>;
+  const res = { data, error: sort(error) } as ResultAPI<T>;
   return Response.json(res, init);
 }
 
@@ -26,6 +26,21 @@ export function success<T extends JSON | object>(data: T, init?: ResponseInit) {
     data, null,
     { status: 200, statusText: "OK", ...init }
   );
+}
+
+
+/**
+ * Creates a ready `Result` object with defined `data` and null `error`.
+ * Can take additional `init` or override them.
+ * @returns A new JSON Response with an already set status code of 200 (OK).
+ */
+export function img<T extends Blob>(data: T, init?: ResponseInit) {
+  const headers = {
+    'Content-Type':'image/png',
+    ...init?.headers
+  };
+
+  return new Response(data, { ...init, headers });
 }
 
 

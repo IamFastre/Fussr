@@ -1,1 +1,19 @@
-export const PI = Math.PI; // Just an example for the export to keep working
+export const DICEBEAR_THUMBS_API = 'https://api.dicebear.com/9.x/thumbs/png';
+
+export const DICEBEAR_BACKGROUND_COLORS = [
+  '111113',
+  '9fc2fc',
+  'bdfcca',
+  'fcacd3',
+  'ffffff',
+];
+
+export const DICEBEAR_SHAPE_COLORS = [
+  'e53935',
+  '32e978',
+  '59319a',
+  'f1f4dc',
+  '43a047',
+  'f88c49',
+  'f8d25c',
+];
