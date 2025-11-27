@@ -60,7 +60,17 @@ export type ResultAPI<T> = (
 /*                              Supabase Related                              */
 /* ========================================================================== */
 
-export type Question = {
+export type UserPublic = {
+  uuid:         Tables<'users'>['uuid'];
+  username:     Tables<'users'>['username'];
+  display_name: Tables<'users'>['display_name'];
+  bio:          Tables<'users'>['bio'];
+  avatar:       Tables<'users'>['avatar'];
+  country:      Tables<'users'>['country'];
+  created_at:   Tables<'users'>['created_at'];
+}
+
+export type QuestionPublic = {
   uuid:       Tables<'questions'>['uuid'];
   title:      Tables<'questions'>['title'];
   body:       Tables<'questions'>['body'];

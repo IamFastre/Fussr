@@ -1,5 +1,4 @@
-import type { Tables } from "$/supabase/types";
-import type { JSON, OmitNever, Question } from "$/utils/types";
+import type { JSON, OmitNever, QuestionPublic, UserPublic } from "$/utils/types";
 import type { QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
@@ -77,7 +76,7 @@ type EndpointsMap = {
     Method: 'GET';
     Params: { username: string };
     Args:   undefined;
-    Return: Tables<'users'>;
+    Return: UserPublic;
   };
 
   /* ======================================================================== */
@@ -86,7 +85,7 @@ type EndpointsMap = {
     Method: 'POST';
     Params: undefined;
     Args:   QuestionForm;
-    Return: Question;
+    Return: QuestionPublic;
   };
 
   /* ======================================================================== */
