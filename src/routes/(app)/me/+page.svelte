@@ -1,11 +1,15 @@
 <script lang="ts">
-  import { AtSign, Clock, Earth } from "@lucide/svelte";
   import { Panel } from "titchy";
+  import { AtSign, Clock, Earth } from "@lucide/svelte";
+
+  import { COUNTRIES } from "$/utils";
+  import { getLocale } from "@/paraglide/runtime";
 
   const { data } = $props();
 
   // TODO: use tanstack query to fetch user data
-  const user = data.user;
+  const user   = data.user;
+  const locale = getLocale();
 </script>
 
 <Panel variant="secondary" class="info-card" borderless>
@@ -25,15 +29,24 @@
         </span>
       </div>
     </div>
-    <span class="bio">
-      {user.bio}
-    </span>
+    {#if user.bio}
+      <span class="bio">
+        {user.bio}
+      </span>
+    {/if}
     <div class="props">
-      <!-- TODO: ADD LOCATION -->
-      <div class="prop since">
-        <Earth />
-        <span>Egypt</span> <!-- TODO: USE REAL LOCATION -->
-      </div>
+      {#if user.country}
+        {@const country = COUNTRIES[user.country as keyof typeof COUNTRIES]}
+        {@const name = country.name[locale] ?? country.name['en']}
+        <div class="prop since">
+          <Earth />
+          <span>{name}</span>
+          <img
+            src="https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/{user.country}.svg"
+            alt={country.emoji}
+          />
+        </div>
+      {/if}
       <div class="prop since">
         <Clock />
         <span>{new Date(user.created_at).toLocaleDateString()}</span>
@@ -102,7 +115,7 @@
     .props {
       flex-direction: row;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: stretch;
       gap: 0.5em;
       font-size: 0.85em;
 
@@ -124,6 +137,10 @@
         span {
           user-select: all;
           color: C(secondary, 50%);
+        }
+
+        img {
+          @include size(1.5em);
         }
       }
     }

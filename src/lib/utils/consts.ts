@@ -1,3 +1,5 @@
+import CountriesJSON from "$/utils/countries-detailed.json";
+
 export const DICEBEAR_THUMBS_API = 'https://api.dicebear.com/9.x/thumbs/png';
 
 export const DICEBEAR_BACKGROUND_COLORS = [
@@ -17,3 +19,5 @@ export const DICEBEAR_SHAPE_COLORS = [
   'f88c49',
   'f8d25c',
 ];
+
+export const COUNTRIES = CountriesJSON;
