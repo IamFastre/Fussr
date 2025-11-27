@@ -44,18 +44,21 @@ export type Database = {
           answer: string
           author: string
           created_at: string
+          sign: boolean
           uuid: string
         }
         Insert: {
           answer: string
           author: string
           created_at?: string
+          sign?: boolean
           uuid?: string
         }
         Update: {
           answer?: string
           author?: string
           created_at?: string
+          sign?: boolean
           uuid?: string
         }
         Relationships: [
@@ -158,18 +161,21 @@ export type Database = {
           author: string
           created_at: string
           question: string
+          sign: boolean
           uuid: string
         }
         Insert: {
           author: string
           created_at?: string
           question: string
+          sign?: boolean
           uuid?: string
         }
         Update: {
           author?: string
           created_at?: string
           question?: string
+          sign?: boolean
           uuid?: string
         }
         Relationships: [

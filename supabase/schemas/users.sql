@@ -1,7 +1,7 @@
 --<< USERS >>-------------------------------------------------------------------
 
 CREATE TABLE public.users (
-  -- Properties --
+  --- Properties ---
   "uuid" UUID NOT NULL,
   "username" TEXT NOT NULL UNIQUE,
   "display_name" TEXT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE public.users (
   "country" CHAR(2) NULL,
   "avatar" TEXT NOT NULL,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-  -- Constrains --
+  --- Constrains ---
   CONSTRAINT users_pkey PRIMARY KEY ("uuid"),
   CONSTRAINT users_uuid_fkey FOREIGN KEY ("uuid") REFERENCES auth.users("id") ON UPDATE CASCADE ON DELETE CASCADE
 );
