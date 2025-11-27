@@ -84,8 +84,8 @@ type EndpointsMap = {
   "/questions/latest": {
     Method: 'GET';
     Params: undefined;
-    Args:   undefined;
-    Return: QuestionPublic[];
+    Args:   { page?:number };
+    Return: { list:QuestionPublic[], total:number };
   };
 
   "/questions/ask": {

@@ -32,21 +32,21 @@ export async function askQuestion(question: QuestionForm) {
   } as QuestionPublic;
 }
 
-export async function getQuestionsLatest() {
+export async function getQuestionsLatest({ page }: { page:number }) {
   const event = getRequestEvent();
 
   const { supabase } = event.locals;
 
   const res = await supabase.admin
     .from('questions')
-    .select('*, user:users(*)')
+    .select('*, user:users(*)', { count:'exact' })
     .order('created_at', { ascending: false })
-    .limit(LATEST_QUESTIONS_LIMIT);
+    .range((page - 1) * LATEST_QUESTIONS_LIMIT, (page * LATEST_QUESTIONS_LIMIT) - 1);
 
   if (res.error || !res.data)
-    return null;
+    return { list:[], total: 0 };
 
-  return res.data.map((q) => ({
+  const list = res.data.map((q) => ({
     uuid:       q.uuid,
     title:      q.title,
     body:       q.body,
@@ -54,4 +54,9 @@ export async function getQuestionsLatest() {
     user:       q.user,
     created_at: q.created_at,
   } as QuestionPublic));
+
+  return {
+    list,
+    total: res.count ?? 0,
+  }
 }
