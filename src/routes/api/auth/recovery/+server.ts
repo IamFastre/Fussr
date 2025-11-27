@@ -1,4 +1,5 @@
 import { badparse, badquery, success } from '$/server/api';
+import type { Endpoints } from '$/utils/api';
 import { RecoveryForm } from '$/utils/zod/forms';
 
 import type { RequestHandler } from './$types';
@@ -17,5 +18,6 @@ export const POST: RequestHandler = async ({ url, request, locals:{ supabase } }
 
   if (auth.error)
     return badquery(auth.error);
-  return success("OK");
+
+  return success<Endpoints['/auth/recovery']['Return']>("OK");
 };

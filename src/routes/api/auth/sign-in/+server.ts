@@ -1,4 +1,5 @@
 import { badparse, badquery, success } from '$/server/api';
+import type { Endpoints } from '$/utils/api';
 import { SignInForm } from '$/utils/zod/forms';
 
 import type { RequestHandler } from './$types';
@@ -18,5 +19,6 @@ export const POST: RequestHandler = async ({ request, locals:{ supabase } }) => 
 
   if (auth.error)
     return badquery(auth.error);
-  return success("OK");
+
+  return success<Endpoints['/auth/sign-in']['Return']>("OK");
 };

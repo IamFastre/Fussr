@@ -1,5 +1,6 @@
 import { notfound, success } from '$/server/api';
 import { getUserByName } from '$/server/funcs/users';
+import type { Endpoints } from '$/utils/api';
 
 import type { RequestHandler } from './$types';
 
@@ -9,5 +10,6 @@ export const GET: RequestHandler = async ({ params }) => {
 
   if (!data)
     return notfound({ message:`User '${username}' not found.` });
-  return success(data);
+
+  return success<Endpoints['/users/[username]']['Return']>(data);
 };

@@ -1,6 +1,6 @@
 import CountriesJSON from "$/utils/countries-detailed.json";
 
-export const DICEBEAR_THUMBS_API = 'https://api.dicebear.com/9.x/thumbs/png';
+export const DICEBEAR_THUMBS_API = 'https://api.dicebear.com/9.x/shapes/png';
 
 export const DICEBEAR_BACKGROUND_COLORS = [
   '111113',
@@ -22,4 +22,4 @@ export const DICEBEAR_SHAPE_COLORS = [
 
 export const COUNTRIES = CountriesJSON;
 
-export const LATEST_QUESTIONS_LIMIT = 60;
+export const LATEST_QUESTIONS_LIMIT = 15;

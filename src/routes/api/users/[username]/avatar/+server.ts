@@ -9,7 +9,9 @@ export const GET: RequestHandler = async ({ request, params }) => {
   const dicebearUrl = new URL(DICEBEAR_THUMBS_API);
 
   dicebearUrl.searchParams.set('seed',                                        username);
-  dicebearUrl.searchParams.set('shapeColor',           DICEBEAR_SHAPE_COLORS.join(','));
+  dicebearUrl.searchParams.set('shape1Color',          DICEBEAR_SHAPE_COLORS.join(','));
+  dicebearUrl.searchParams.set('shape2Color',          DICEBEAR_SHAPE_COLORS.join(','));
+  dicebearUrl.searchParams.set('shape3Color',          DICEBEAR_SHAPE_COLORS.join(','));
   dicebearUrl.searchParams.set('backgroundColor', DICEBEAR_BACKGROUND_COLORS.join(','));
   dicebearUrl.searchParams.set('size',                                           '256');
   dicebearUrl.searchParams.set('scale',                                           '90');
