@@ -4,12 +4,14 @@
 
   import { COUNTRIES } from "$/utils";
   import { getLocale } from "@/paraglide/runtime";
+  import { query } from "$/client/api";
 
   const { data } = $props();
 
-  // TODO: use tanstack query to fetch user data
-  const user   = data.user;
-  const locale = getLocale();
+  const userQuery = query({ method:'GET', path:'/users/[username]', params:{ username:data.user.username } }, data.user);
+  const locale    = getLocale();
+
+  const user = $derived(userQuery.data ?? data.user);
 </script>
 
 <Panel variant="secondary" class="info-card" borderless>
@@ -99,7 +101,7 @@
 
         color: C(secondary);
         opacity: 0.35;
-        font-family: Fira Code; // TODO: ADD FIRE CODE
+        font-family: FiraCode;
         font-size: 0.8em;
 
         :global(svg) { @include size(0.85em); stroke-width: 3px; }
