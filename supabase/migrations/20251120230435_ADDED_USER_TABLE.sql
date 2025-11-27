@@ -8,13 +8,13 @@ create table "public"."users" (
 
 alter table "public"."users" enable row level security;
 
+CREATE UNIQUE INDEX users_pkey ON public.users USING btree (uuid);
+
+alter table "public"."users" add constraint "users_pkey" PRIMARY KEY using index "users_pkey";
+
 CREATE INDEX idx_users_username ON public.users USING btree (username);
 
 CREATE INDEX idx_users_uuid ON public.users USING btree (uuid);
-
-CREATE UNIQUE INDEX users_username_unique ON public.users USING btree (username);
-
-alter table "public"."users" add constraint "users_username_unique" UNIQUE using index "users_username_unique";
 
 alter table "public"."users" add constraint "users_uuid_fkey" FOREIGN KEY (uuid) REFERENCES auth.users(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 

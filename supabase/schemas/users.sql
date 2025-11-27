@@ -6,6 +6,7 @@ CREATE TABLE public.users (
   "username" TEXT NOT NULL UNIQUE,
   "display_name" TEXT NULL,
   "bio" TEXT NULL,
+  "country" CHAR(2) NULL,
   "avatar" TEXT NOT NULL,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   -- Constrains --

@@ -17,13 +17,9 @@ CREATE INDEX idx_questions_user ON public.questions USING btree ("user");
 
 CREATE INDEX idx_questions_uuid ON public.questions USING btree (uuid);
 
-CREATE UNIQUE INDEX users_uuid_key ON public.users USING btree (uuid);
-
 alter table "public"."questions" add constraint "questions_user_fkey" FOREIGN KEY ("user") REFERENCES public.users(uuid) ON UPDATE CASCADE ON DELETE CASCADE not valid;
 
 alter table "public"."questions" validate constraint "questions_user_fkey";
-
-alter table "public"."users" add constraint "users_uuid_key" UNIQUE using index "users_uuid_key";
 
 set check_function_bodies = off;
 

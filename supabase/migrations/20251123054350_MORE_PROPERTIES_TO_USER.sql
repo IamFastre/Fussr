@@ -1,12 +1,8 @@
-alter table "public"."users" drop constraint "users_username_unique";
-
 drop trigger if exists "new_user" on "auth"."users";
 
 drop function if exists "public"."on_new_user"();
 
 drop index if exists "public"."idx_users_username";
-
-drop index if exists "public"."users_username_unique";
 
 alter table "public"."users" add column "avatar" text not null;
 
