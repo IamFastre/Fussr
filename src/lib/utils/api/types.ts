@@ -81,6 +81,13 @@ type EndpointsMap = {
 
   /* ======================================================================== */
 
+  "/questions/latest": {
+    Method: 'GET';
+    Params: undefined;
+    Args:   undefined;
+    Return: QuestionPublic[];
+  };
+
   "/questions/ask": {
     Method: 'POST';
     Params: undefined;

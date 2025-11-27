@@ -1,3 +1,4 @@
+import type { UserPublic } from "$/utils/types";
 import { UsernameShape } from "$/utils/zod/forms";
 import { getRequestEvent } from "$app/server";
 
@@ -30,5 +31,16 @@ export async function getUserByName(username: string) {
     .ilike('username', data)
     .single();
 
-  return res.data;
+  if (!res.data)
+    return null;
+
+  return {
+    uuid:         res.data.uuid,
+    username:     res.data.username,
+    display_name: res.data.display_name,
+    avatar:       res.data.avatar,
+    country:      res.data.country,
+    bio:          res.data.bio,
+    created_at:   res.data.created_at,
+  } as UserPublic;
 }
