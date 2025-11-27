@@ -75,6 +75,9 @@ export type QuestionPublic = {
   title:      Tables<'questions'>['title'];
   body:       Tables<'questions'>['body'];
   tags:       Tables<'questions'>['tags'];
-  user:       UserPublic;
+  score:      Tables<'questions'>['score'];
+  answers:    Tables<'questions'>['answers'];
+  follows:    Tables<'questions'>['follows'];
+  author:     UserPublic;
   created_at: Tables<'questions'>['created_at'];
 }

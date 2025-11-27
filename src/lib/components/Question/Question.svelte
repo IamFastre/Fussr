@@ -21,15 +21,19 @@
 
   const locale = getLocale();
 
-  const author = $derived(question.user);
+  const author = $derived(question.author);
   const time   = $derived(dayjs(question.created_at).locale(locale));
+
+  const scoreSign = $derived(question.score > 0 ? "+" : question.score < 0 ? "-" : "");
 </script>
 
 <Panel class="question" variant="secondary" borderless>
   <div class="props">
-    <div class="score good">
-      <div class="count">
-        {(15).toLocaleString()}
+    <div class="score">
+      <div class="count {question.score > 0 ? 'good' : question.score < 0 ? 'bad' : ''}">
+        <span>
+          <small>{scoreSign}</small>{Math.abs(question.score).toLocaleString()}
+        </span>
       </div>
       <div class="label">
         {m.question_score()}
@@ -37,7 +41,7 @@
     </div>
     <div class="prop answers">
       <div class="count">
-        {(2).toLocaleString()}
+        {question.answers.toLocaleString()}
       </div>
       <div class="label">
         {m.question_answers()}
@@ -45,7 +49,7 @@
     </div>
     <div class="prop followers">
       <div class="count">
-        {(1).toLocaleString()}
+        {question.follows.toLocaleString()}
       </div>
       <div class="label">
         {m.question_followers()}
@@ -104,11 +108,17 @@
         align-items: center;
         margin-bottom: 10px;
 
-        &.good .label { color: C(success); }
-        &.bad  .label { color: C(danger); }
 
-        .count { font-size: 1.5em;  }
-        .label { font-size: 0.75em; }
+        .count {
+          font-size: 1.5em;
+          &.good small { color: C(success); }
+          &.bad  small { color: C(danger); }
+        }
+
+        .label {
+          color: C(accent);
+          font-size: 0.75em;
+        }
       }
 
       .prop {

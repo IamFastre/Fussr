@@ -39,35 +39,194 @@ export type Database = {
   }
   public: {
     Tables: {
-      questions: {
+      answer_votes: {
         Row: {
+          answer: string
+          author: string
+          created_at: string
+          uuid: string
+        }
+        Insert: {
+          answer: string
+          author: string
+          created_at?: string
+          uuid?: string
+        }
+        Update: {
+          answer?: string
+          author?: string
+          created_at?: string
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answer_votes_answer_fkey"
+            columns: ["answer"]
+            isOneToOne: false
+            referencedRelation: "answers"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "answer_votes_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      answers: {
+        Row: {
+          author: string
           body: string
           created_at: string
-          tags: string[]
-          title: string
+          question: string
+          score: number
+          uuid: string
+        }
+        Insert: {
+          author: string
+          body: string
+          created_at?: string
+          question: string
+          score?: number
+          uuid?: string
+        }
+        Update: {
+          author?: string
+          body?: string
+          created_at?: string
+          question?: string
+          score?: number
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "answers_question_fkey"
+            columns: ["question"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      question_follows: {
+        Row: {
+          created_at: string
+          question: string
           user: string
           uuid: string
         }
         Insert: {
-          body: string
           created_at?: string
-          tags: string[]
-          title: string
+          question: string
           user: string
           uuid?: string
         }
         Update: {
-          body?: string
           created_at?: string
-          tags?: string[]
-          title?: string
+          question?: string
           user?: string
           uuid?: string
         }
         Relationships: [
           {
-            foreignKeyName: "questions_user_fkey"
+            foreignKeyName: "question_follows_question_fkey"
+            columns: ["question"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "question_follows_user_fkey"
             columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      question_votes: {
+        Row: {
+          author: string
+          created_at: string
+          question: string
+          uuid: string
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          question: string
+          uuid?: string
+        }
+        Update: {
+          author?: string
+          created_at?: string
+          question?: string
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_votes_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["uuid"]
+          },
+          {
+            foreignKeyName: "question_votes_question_fkey"
+            columns: ["question"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["uuid"]
+          },
+        ]
+      }
+      questions: {
+        Row: {
+          answers: number
+          author: string
+          body: string
+          created_at: string
+          follows: number
+          score: number
+          tags: string[]
+          title: string
+          uuid: string
+        }
+        Insert: {
+          answers?: number
+          author: string
+          body: string
+          created_at?: string
+          follows?: number
+          score?: number
+          tags: string[]
+          title: string
+          uuid?: string
+        }
+        Update: {
+          answers?: number
+          author?: string
+          body?: string
+          created_at?: string
+          follows?: number
+          score?: number
+          tags?: string[]
+          title?: string
+          uuid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_author_fkey"
+            columns: ["author"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["uuid"]
