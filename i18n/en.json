@@ -47,5 +47,8 @@
   "routes_home": "Home",
   "routes_me": "Me",
   "routes_settings": "Settings",
-  "welcome": "Welcome to {name}!"
+  "welcome": "Welcome to {name}!",
+  "question_score": "Score",
+  "question_answers": "Answers",
+  "question_followers": "Followers"
 }
