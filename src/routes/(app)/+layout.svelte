@@ -49,7 +49,10 @@
 
   :global {
     .titchy.screen.nav-holder.safe-area-padding {
-      padding: 10px !important;
+      padding-top:    safe(top,    10px) !important;
+      padding-left:   safe(left,   10px) !important;
+      padding-bottom: safe(bottom, 10px) !important;
+      padding-right:  safe(right,  10px) !important;
 
       @include small-screen { flex-direction: column; }
       @include wide-screen  { flex-direction: row;    }

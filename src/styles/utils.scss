@@ -81,6 +81,12 @@
   @return $value;
 }
 
+/* ================================= Length ================================= */
+
+@function safe($side: top, $value: 0px) {
+  @return calc($value + V(safe-inset-#{$side}));
+}
+
 /* ================================= Sizing ================================= */
 
 @mixin width($value, $mode: 'none') {

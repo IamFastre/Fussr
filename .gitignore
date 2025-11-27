@@ -1,4 +1,6 @@
 # Other
+*.old
+*.old.*
 /src/paraglide
 
 # Node
