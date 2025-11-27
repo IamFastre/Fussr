@@ -49,22 +49,24 @@ export async function api<T extends keyof Endpoints>(req: EndpointRequest<T>)
 type QueryOptions<T> = Partial<Omit<DefinedInitialDataOptions<T>, 'initialData' | 'queryFn' | 'queryKey'>>;
 
 export function query<T extends keyof Endpoints>
-  (req: EndpointRequest<T>, initialData?: Endpoints[T]["Return"], options?: QueryOptions<Endpoints[T]["Return"]>)
+  (reqOrFn: EndpointRequest<T> | (() => EndpointRequest<T>), initialData?: Endpoints[T]["Return"], options?: QueryOptions<Endpoints[T]["Return"]>)
 {
-  const queryFn = async () => {
-    const response = await api(req);
-
-    if (response.data) return response.data;
-    else return null!;
-  }
-
-  const queryKey = [
-    req.path,
-    req.params ? entries(req.params) : undefined,
-    req.args   ? entries(req.args)   : undefined,
-  ];
-
   return createQuery(() => {
+    const req = typeof reqOrFn === 'function' ? reqOrFn() : reqOrFn;
+
+    const queryFn = async () => {
+      const response = await api(req);
+
+      if (response.data) return response.data;
+      else return null!;
+    }
+
+    const queryKey = [
+      req.path,
+      req.params ? entries(req.params) : undefined,
+      req.args   ? entries(req.args)   : undefined,
+    ];
+
     return {
       initialData,
       queryFn,
