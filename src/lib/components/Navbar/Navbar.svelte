@@ -59,8 +59,8 @@
   .navbar {
     $m: 10px;
 
-    @include width(V(navbar-wide-width));
-    @include height(V(navbar-wide-height));
+    @include width(V(navbar-wide-width), 'all');
+    @include height(V(navbar-wide-height), 'all');
 
     // background-color: C(secondary, 5%);
     // backdrop-filter: blur(10px);
@@ -140,8 +140,8 @@
     }
 
     @include small-screen {
-      @include width(V(navbar-small-width));
-      @include height(calc(V(navbar-small-height) + V(safe-inset-bottom)));
+      @include width(V(navbar-small-width), 'all');
+      @include height(calc(V(navbar-small-height) + V(safe-inset-bottom)), 'all');
 
       position: fixed;
       bottom: 0;
@@ -191,7 +191,7 @@
     @include wide-screen {
       .content {
         position: fixed;
-        @include width(calc(V(navbar-wide-width) - $m * 2));
+        @include width(calc(V(navbar-wide-width) - $m * 2), 'all');
       }
     }
   }

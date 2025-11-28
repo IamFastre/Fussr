@@ -123,6 +123,7 @@
     </span>
   </Panel>
 {/if}
+
 <style lang="scss">
   @use "@/styles/utils.scss" as *;
 
@@ -169,6 +170,7 @@
       gap: 10px;
       padding: 10px;
       min-width: 75px;
+      max-width: 125px;
 
       .score {
         align-items: center;
@@ -213,6 +215,7 @@
 
     .content {
       flex: 1;
+      min-width: 0;
       padding: 10px;
       gap: 10px;
     }

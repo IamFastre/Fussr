@@ -60,6 +60,7 @@
       > .content {
         flex: 1;
         gap: 10px;
+        min-width: 0;
 
         @include small-screen { padding: 0;      }
         @include wide-screen  { padding: 0 10px; }
