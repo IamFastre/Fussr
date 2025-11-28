@@ -52,5 +52,6 @@
   "routes_me": "Me",
   "routes_settings": "Settings",
   "welcome": "Welcome to {name}!",
-  "question_follow": "Follow"
+  "question_follow": "Follow",
+  "question_following": "Unfollow"
 }

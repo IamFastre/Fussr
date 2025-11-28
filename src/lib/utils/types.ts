@@ -60,6 +60,8 @@ export type ResultAPI<T> = (
 /*                              Supabase Related                              */
 /* ========================================================================== */
 
+export type VoteDirection = 'up' | 'down' | 'none';
+
 export type UserPublic = {
   uuid:         Tables<'users'>['uuid'];
   username:     Tables<'users'>['username'];
@@ -81,3 +83,8 @@ export type QuestionPublic = {
   author:     UserPublic;
   created_at: Tables<'questions'>['created_at'];
 }
+
+export type QuestionPersonal = QuestionPublic & {
+  vote:   VoteDirection;
+  follow: boolean;
+};

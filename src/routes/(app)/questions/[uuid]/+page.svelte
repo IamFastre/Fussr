@@ -11,7 +11,8 @@
   import { m } from '@/paraglide/messages';
   import { getLocale } from "@/paraglide/runtime";
   import { Markdown, Tags } from "$/components";
-  import { query } from "$/client/api";
+  import { api, query } from "$/client/api";
+  import type { VoteDirection } from "$/utils/types";
 
   dayjs.extend(relativeTime);
 
@@ -27,14 +28,34 @@
   const time     = $derived(dayjs(question?.created_at ?? "").locale(locale));
   const isAuthor = $derived(data.auth.user?.id === question?.author.uuid);
 
-  let vote = $state<'up' | 'down'>();
+  let vote    = $derived<VoteDirection>(question?.vote ?? 'none');
+  let follow  = $derived<boolean>(!!question?.follow);
+  let loading = $state<boolean>(false);
 
-  const onVoteUp = () => {
-    vote = vote === 'up' ? undefined : 'up';
+  const onVote = (dir: 'up' | 'down') => async () => {
+    loading = true;
+
+    const args   = { vote: vote === dir ? 'none' : dir } as const;
+    const params = { uuid };
+
+    if (vote !== 'none')
+      await api({ method:'POST', path:'/questions/[uuid]/vote', params, args:{ vote:'none' } });
+
+    if (args.vote !== 'none')
+      await api({ method:'POST', path:'/questions/[uuid]/vote', params, args });
+
+    await questionQuery.refetch();
+    loading = false;
   };
 
-  const onVoteDown = () => {
-    vote = vote === 'down' ? undefined : 'down';
+  const onFollow = async () => {
+    loading = true;
+
+    const params = { uuid };
+    await api({ method:'POST', path:'/questions/[uuid]/follow', params });
+
+    await questionQuery.refetch();
+    loading = false;
   };
 </script>
 
@@ -61,24 +82,24 @@
 
   <Panel class="question-body">
     <div class="sidebar">
-      <Button variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVoteUp}>
+      <Button variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
         <ArrowUp />
       </Button>
       <div class="score">
         <span class="count {question.score > 0 ? 'good' : question.score < 0 ? 'bad' : ''}">
-          {question.score.toLocaleString()}
+          <small>{question.score > 0 ? '+' : question.score < 0 ? '-' : ''}</small>{Math.abs(question.score).toLocaleString()}
         </span>
         <span class="label">
           {m.question_score()}
         </span>
       </div>
-      <Button variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVoteDown}>
+      <Button variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
         <ArrowDown />
       </Button>
       <Separator variant="secondary" line="dashed" />
       <ButtonGroup class="actions">
-        <Button variant="outline">
-          {m.question_follow()}
+        <Button variant="outline" onclick={onFollow} disabled={loading}>
+          {follow ? m.question_following() : m.question_follow()}
         </Button>
         <Button variant="outline">
           <Share />
@@ -175,7 +196,7 @@
       gap: 10px;
       padding: 10px;
       min-width: 75px;
-      max-width: 125px;
+      max-width: 100px;
 
       .score {
         align-items: center;
@@ -197,6 +218,7 @@
         .button {
           flex: 1;
           font-size: 0.66em;
+          text-align: center;
           @include size(unset, 'min');
 
           svg {

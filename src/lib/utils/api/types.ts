@@ -1,4 +1,4 @@
-import type { JSON, OmitNever, QuestionPublic, UserPublic } from "$/utils/types";
+import type { JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic } from "$/utils/types";
 import type { QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
@@ -85,7 +85,7 @@ type EndpointsMap = {
     Method: 'GET';
     Params: { uuid:string };
     Args:   undefined;
-    Return: QuestionPublic;
+    Return: QuestionPersonal;
   };
 
   "/questions/[uuid]/vote": {

@@ -1,34 +1,57 @@
 import { getRequestEvent } from "$app/server";
 
 import { LATEST_QUESTIONS_LIMIT } from "$/utils";
-import type { QuestionPublic } from "$/utils/types";
+import type { QuestionPersonal, QuestionPublic } from "$/utils/types";
 import { QuestionForm } from "$/utils/zod/forms";
 
 export async function getQuestionByUUID(uuid: string) {
   const event = getRequestEvent();
 
-  const { supabase } = event.locals;
+  const { supabase, auth } = event.locals;
 
-  const res = await supabase.admin
-    .from('questions')
-    .select('*, author:users(*)')
-    .eq('uuid', uuid)
-    .maybeSingle();
+  const promises = await Promise.all([
+    supabase.admin
+      .from('questions')
+      .select('*, author:users(*)')
+      .eq('uuid', uuid)
+      .single(),
 
-  if (!res.data)
+    supabase.admin
+      .from('question_votes')
+      .select('*')
+      .eq('author', auth.user?.id ?? '')
+      .eq('question', uuid)
+      .single(),
+
+    supabase.admin
+      .from('question_follows')
+      .select('*')
+      .eq('user', auth.user?.id ?? '')
+      .eq('question', uuid)
+      .single(),
+  ]);
+
+  const question = promises[0].data;
+  const vote = promises[1].data;
+  const follow = promises[2].data;
+
+  if (!question)
     return null;
 
   return {
-    uuid:       res.data.uuid,
-    title:      res.data.title,
-    body:       res.data.body,
-    tags:       res.data.tags,
-    score:      res.data.score,
-    answers:    res.data.answers,
-    follows:    res.data.follows,
-    author:     res.data.author,
-    created_at: res.data.created_at,
-  } as QuestionPublic;
+    uuid:       question.uuid,
+    title:      question.title,
+    body:       question.body,
+    tags:       question.tags,
+    score:      question.score,
+    answers:    question.answers,
+    follows:    question.follows,
+    author:     question.author,
+    created_at: question.created_at,
+
+    vote:   !vote?.uuid ? 'none' : vote.sign ? 'up' : 'down',
+    follow: !!follow?.uuid,
+  } as QuestionPersonal;
 }
 
 export async function askQuestion(question: QuestionForm) {
@@ -72,7 +95,7 @@ export async function voteQuestion({ question, vote }: { question: string, vote:
   if (vote === 'none') {
     const res = await supabase.admin
       .from('question_votes')
-      .delete()
+      .delete({ })
       .eq('author', auth.user.id)
       .eq('question', question)
       .select('*')
@@ -107,9 +130,24 @@ export async function followQuestion(uuid: string) {
 
   const res = await supabase.admin
     .from('question_follows')
-    .insert({ user:auth.user.id, question: uuid })
+    .insert({ user:auth.user.id, question:uuid })
     .select('*')
     .single();
+
+  if (res.error?.message.includes('duplicate')) {
+    const res = await supabase.admin
+      .from('question_follows')
+      .delete({ })
+      .eq('user', auth.user.id)
+      .eq('question', uuid)
+      .select('*')
+      .single();
+
+    if (!res.data)
+      return null;
+
+    return res.data.uuid;
+  }
 
   if (!res.data)
     return null;
