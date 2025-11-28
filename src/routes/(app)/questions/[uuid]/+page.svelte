@@ -73,7 +73,7 @@
       <Separator variant="secondary" line="dashed" />
       <ButtonGroup class="actions">
         <Button variant="outline">
-          Follow
+          {m.question_follow()}
         </Button>
         <Button variant="outline">
           <Share />

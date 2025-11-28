@@ -34,6 +34,7 @@
       color: C(accent);
       background-color: C(accent, 10%);
 
+      direction: ltr;
       font-size: 0.75em;
       border-radius: 5px;
     }

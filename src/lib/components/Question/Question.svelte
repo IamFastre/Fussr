@@ -10,7 +10,7 @@
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
   import type { QuestionPublic } from "$/utils/types";
-  import { Tags } from "$/components"
+  import { Markdown, Tags } from "$/components"
 
   dayjs.extend(relativeTime);
 
@@ -62,7 +62,7 @@
       {question.title}
     </Link>
     <div class="body">
-      <span>{question.body}</span>
+      <Markdown content={question.body} />
     </div>
     <Tags tags={question.tags} />
     <div class="foot">
@@ -135,6 +135,7 @@
       align-items: start;
       padding: 10px;
       gap: 10px;
+      min-width: 0;
 
       .titchy.link.title {
         color: C(accent);
@@ -143,17 +144,15 @@
       }
 
       .body {
+        $b: 10px;
+
         font-size: 0.85em;
         color: C(secondary, 70%);
-
-        span {
-          overflow: hidden;
-          display: -webkit-box;
-          line-clamp: 4;
-          -webkit-line-clamp: 4;
-          box-orient: vertical;
-          -webkit-box-orient: vertical;
-        }
+        max-height: 200px;
+        max-width: 100%;
+        mask-image: linear-gradient(to bottom, white calc(100% - $b * 3), transparent calc(100% - $b));
+        padding-bottom: $b;
+        margin-bottom: -$b;
       }
 
       .tags {

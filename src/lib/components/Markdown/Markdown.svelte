@@ -44,12 +44,14 @@
       }
 
       :not(pre) code {
-        padding: 2.5px 5px;
+        direction: ltr;
+        padding: 1px 5px;
         border-radius: 5px;
         background-color: C(secondary, 10%);
       }
 
       pre {
+        direction: ltr;
         background-color: C(secondary, 10%);
         border-radius: 5px;
         padding: 5px;

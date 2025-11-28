@@ -51,5 +51,6 @@
   "routes_home": "رئيسي",
   "routes_me": "حسابي",
   "routes_settings": "الإعدادات",
-  "welcome": "مرحبًا بك في {name}!"
+  "welcome": "مرحبًا بك في {name}!",
+  "question_follow": "تابع"
 }
