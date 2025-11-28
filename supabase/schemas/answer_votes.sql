@@ -10,7 +10,8 @@ CREATE TABLE public.answer_votes (
   --- Constrains ---
   CONSTRAINT answer_votes_pkey PRIMARY KEY ("uuid"),
   CONSTRAINT answer_votes_answer_fkey FOREIGN KEY ("answer") REFERENCES public.answers("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT answer_votes_author_fkey FOREIGN KEY ("author") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT answer_votes_author_fkey FOREIGN KEY ("author") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT answer_votes_author_answer_unique UNIQUE ("author", "answer")
 );
 
 --<< RLS >>---------------------------------------------------------------------

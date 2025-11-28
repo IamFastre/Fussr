@@ -9,7 +9,8 @@ CREATE TABLE public.question_follows (
   --- Constrains ---
   CONSTRAINT question_follows_pkey PRIMARY KEY ("uuid"),
   CONSTRAINT question_follows_question_fkey FOREIGN KEY ("question") REFERENCES public.questions("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT question_follows_user_fkey FOREIGN KEY ("user") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT question_follows_user_fkey FOREIGN KEY ("user") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT question_follows_user_question_unique UNIQUE ("user", "question")
 );
 
 --<< RLS >>---------------------------------------------------------------------

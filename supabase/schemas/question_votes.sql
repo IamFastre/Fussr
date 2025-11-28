@@ -3,14 +3,15 @@
 CREATE TABLE public.question_votes (
   --- Properties ---
   "uuid" UUID NOT NULL DEFAULT GEN_RANDOM_UUID(),
-  "sign" boolean NOT NULL DEFAULT TRUE,
+  "sign" BOOLEAN NOT NULL DEFAULT TRUE,
   "question" UUID NOT NULL,
   "author" UUID NOT NULL,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   --- Constrains ---
   CONSTRAINT question_votes_pkey PRIMARY KEY ("uuid"),
   CONSTRAINT question_votes_question_fkey FOREIGN KEY ("question") REFERENCES public.questions("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT question_votes_author_fkey FOREIGN KEY ("author") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE
+  CONSTRAINT question_votes_author_fkey FOREIGN KEY ("author") REFERENCES public.users("uuid") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT question_votes_author_question_unique UNIQUE ("author", "question")
 );
 
 --<< RLS >>---------------------------------------------------------------------
