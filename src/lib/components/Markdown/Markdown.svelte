@@ -36,8 +36,17 @@
     line-height: 1.5rem;
     align-items: stretch;
     overflow: hidden;
+    gap: 0.75em;
 
     :global {
+      hr {
+        margin: 0;
+        width: 100%;
+        border: none;
+        border-top: 2px solid C(accent);
+        border-radius: 2px;
+      }
+
       img {
         max-width: 100%;
         max-height: 100%;
@@ -55,12 +64,10 @@
         background-color: C(secondary, 10%);
         border-radius: 5px;
         padding: 5px;
+        font-size: smaller;
+        font-family: FiraCode;
 
-        span.lang {
-          color: C(accent);
-          font-family: FiraCode;
-          font-size: smaller;
-        }
+        span.lang { color: C(accent); }
 
         code {
           display: block;

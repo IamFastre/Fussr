@@ -5,19 +5,24 @@
   import "dayjs/locale/ar";
 
   import { page } from '$app/state';
-  import { m } from '@/paraglide/messages';
   import { ArrowDown, ArrowUp, Calendar, CircleX, Pencil, Share, Trash } from '@lucide/svelte';
   import { Button, ButtonGroup, Link, Panel, Separator } from 'titchy';
+
+  import { m } from '@/paraglide/messages';
   import { getLocale } from "@/paraglide/runtime";
   import { Markdown, Tags } from "$/components";
+  import { query } from "$/client/api";
 
   dayjs.extend(relativeTime);
 
   const { data } = $props();
 
   const locale = getLocale();
+  const uuid   = $derived(page.params.uuid ?? "");
 
-  const question = $derived(data.question);
+  const questionQuery = query(() => ({ method:'GET', path:'/questions/[uuid]', params:{ uuid } }), data.question!);
+
+  const question = $derived(questionQuery.data ?? data.question);
   const author   = $derived(question?.author);
   const time     = $derived(dayjs(question?.created_at ?? "").locale(locale));
   const isAuthor = $derived(data.auth.user?.id === question?.author.uuid);
@@ -119,7 +124,7 @@
   <Panel class="not-fount">
     <CircleX />
     <span>
-      {@html m.questions_not_found({ uuid:page.params.uuid ?? "" })}
+      {@html m.questions_not_found({ uuid })}
     </span>
   </Panel>
 {/if}
