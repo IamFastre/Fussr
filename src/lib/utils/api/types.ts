@@ -81,6 +81,13 @@ type EndpointsMap = {
 
   /* ======================================================================== */
 
+  "/questions/[uuid]": {
+    Method: 'GET';
+    Params: { uuid:string };
+    Args:   undefined;
+    Return: QuestionPublic;
+  };
+
   "/questions/latest": {
     Method: 'GET';
     Params: undefined;

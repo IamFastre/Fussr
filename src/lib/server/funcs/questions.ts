@@ -4,6 +4,33 @@ import { LATEST_QUESTIONS_LIMIT } from "$/utils";
 import type { QuestionPublic } from "$/utils/types";
 import { QuestionForm } from "$/utils/zod/forms";
 
+export async function getQuestionByUUID(uuid: string) {
+  const event = getRequestEvent();
+
+  const { supabase } = event.locals;
+
+  const res = await supabase.admin
+    .from('questions')
+    .select('*, author:users(*)')
+    .eq('uuid', uuid)
+    .maybeSingle();
+
+  if (!res.data)
+    return null;
+
+  return {
+    uuid:       res.data.uuid,
+    title:      res.data.title,
+    body:       res.data.body,
+    tags:       res.data.tags,
+    score:      res.data.score,
+    answers:    res.data.answers,
+    follows:    res.data.follows,
+    author:     res.data.author,
+    created_at: res.data.created_at,
+  } as QuestionPublic;
+}
+
 export async function askQuestion(question: QuestionForm) {
   const event = getRequestEvent();
 
