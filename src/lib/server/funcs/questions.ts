@@ -62,6 +62,61 @@ export async function askQuestion(question: QuestionForm) {
   } as QuestionPublic;
 }
 
+export async function voteQuestion({ question, vote }: { question: string, vote: 'up' | 'down' | 'none' }) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  if (vote === 'none') {
+    const res = await supabase.admin
+      .from('question_votes')
+      .delete()
+      .eq('author', auth.user.id)
+      .eq('question', question)
+      .select('*')
+      .single();
+
+    if (!res.data)
+      return null;
+
+    return res.data.uuid;
+  }
+
+  else {
+    const res = await supabase.admin
+      .from('question_votes')
+      .insert({ author:auth.user.id, question, sign:vote === 'up' })
+      .select('*')
+      .single();
+
+    if (!res.data)
+      return null;
+
+    return res.data.uuid;
+  }
+}
+
+export async function followQuestion(uuid: string) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  const res = await supabase.admin
+    .from('question_follows')
+    .insert({ user:auth.user.id, question: uuid })
+    .select('*')
+    .single();
+
+  if (!res.data)
+    return null;
+
+  return res.data.uuid;
+}
+
 export async function getQuestionsLatest({ page }: { page:number }) {
   const event = getRequestEvent();
 

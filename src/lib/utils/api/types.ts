@@ -88,6 +88,20 @@ type EndpointsMap = {
     Return: QuestionPublic;
   };
 
+  "/questions/[uuid]/vote": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   { vote:'up' | 'down' | 'none' };
+    Return: "OK";
+  };
+
+  "/questions/[uuid]/follow": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   undefined;
+    Return: "OK";
+  };
+
   "/questions/latest": {
     Method: 'GET';
     Params: undefined;
