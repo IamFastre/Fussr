@@ -43,12 +43,13 @@
   "go_to": "اذهب إلى",
   "home_page": "الصفحة الرئيسية",
   "language": "اللغة",
+  "question_answers": "إجابات",
+  "question_followers": "متابعات",
+  "question_score": "نقاط",
+  "questions_not_found": "لا يوجد سؤال بالمعرف الآتي: <span class=\"uuid\">{uuid}</span>.",
   "routes_about": "عنّا",
   "routes_home": "رئيسي",
   "routes_me": "حسابي",
   "routes_settings": "الإعدادات",
-  "welcome": "مرحبًا بك في {name}!",
-  "question_score": "نقاط",
-  "question_answers": "إجابات",
-  "question_followers": "متابعات"
+  "welcome": "مرحبًا بك في {name}!"
 }

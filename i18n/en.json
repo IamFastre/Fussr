@@ -43,12 +43,13 @@
   "go_to": "Go to",
   "home_page": "Home Page",
   "language": "Language",
+  "question_answers": "Answers",
+  "question_followers": "Follows",
+  "question_score": "Score",
+  "questions_not_found": "No question with UUID <span class=\"uuid\">{uuid}</span> exists.",
   "routes_about": "About",
   "routes_home": "Home",
   "routes_me": "Me",
   "routes_settings": "Settings",
-  "welcome": "Welcome to {name}!",
-  "question_score": "Score",
-  "question_answers": "Answers",
-  "question_followers": "Follows"
+  "welcome": "Welcome to {name}!"
 }
