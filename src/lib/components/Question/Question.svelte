@@ -5,11 +5,12 @@
   import "dayjs/locale/ar";
 
   import { Link, Panel } from "titchy";
+  import { Calendar } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
-  import type { QuestionPublic } from "$/utils/types";
   import { getLocale } from "@/paraglide/runtime";
-  import { Calendar } from "@lucide/svelte";
+  import type { QuestionPublic } from "$/utils/types";
+  import { Tags } from "$/components"
 
   dayjs.extend(relativeTime);
 
@@ -63,13 +64,7 @@
     <div class="body">
       <span>{question.body}</span>
     </div>
-    <div class="tags">
-      {#each question.tags as tag, i (i)}
-        <Link class="tag" variant="wrapper" href="/tags/{tag}">
-          #{tag}
-        </Link>
-      {/each}
-    </div>
+    <Tags tags={question.tags} />
     <div class="foot">
       <Link class="author" variant="wrapper" href="/users/{author.username}">
         <img
