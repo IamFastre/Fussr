@@ -192,11 +192,31 @@
     padding: 0;
     gap: 0;
 
+    // @include small-screen {
+    //   flex-direction: column;
+    // }
+
     .sidebar {
       gap: 10px;
       padding: 10px;
       min-width: 75px;
-      max-width: 100px;
+      max-width: 120px;
+
+      // @include small-screen {
+      //   flex-direction: row;
+      //   width: 100%;
+      //   max-width: unset;
+
+      //   hr.titchy.separator { display: none; }
+
+      //   .titchy.button-group.actions {
+      //     flex: 1;
+      //   }
+
+      //   .props {
+      //     justify-content: center;
+      //   }
+      // }
 
       .score {
         align-items: center;
@@ -211,6 +231,7 @@
 
         .label {
           font-size: 0.75em;
+          margin-top: -5px;
         }
       }
 
