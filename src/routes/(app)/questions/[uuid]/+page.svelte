@@ -9,7 +9,7 @@
   import { ArrowDown, ArrowUp, Calendar, CircleX, Pencil, Share, Trash } from '@lucide/svelte';
   import { Button, ButtonGroup, Link, Panel, Separator } from 'titchy';
   import { getLocale } from "@/paraglide/runtime";
-  import { Tags } from "$/components";
+  import { Markdown, Tags } from "$/components";
 
   dayjs.extend(relativeTime);
 
@@ -110,7 +110,7 @@
     </div>
     <div class="content">
       <div class="body">
-        {question.body}
+        <Markdown content={question.body} />
       </div>
       <Tags tags={question.tags} />
     </div>

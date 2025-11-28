@@ -46,15 +46,6 @@ content {
   display: contents;
 }
 
-h1, h2, h3,
-h4, h5, h6 {
-  margin: 0;
-}
-
-img {
-  object-fit: contain;
-}
-
 :where(
   header, main, footer,
   nav, section, div,
@@ -66,6 +57,24 @@ a:where([data-variant=wrapper]) {
   @include flexbox(true);
   color: inherit;
   cursor: pointer;
+}
+
+p,
+h1, h2, h3,
+h4, h5, h6 {
+  margin: 0;
+}
+
+img {
+  object-fit: contain;
+}
+
+code {
+  font-family: FiraCode;
+}
+
+pre code {
+  display: block;
 }
 
 /* ========================================================================== */
