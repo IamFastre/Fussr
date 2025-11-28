@@ -132,12 +132,13 @@
 
     .content {
       flex: 9;
-      align-items: start;
+      align-items: stretch;
       padding: 10px;
       gap: 10px;
       min-width: 0;
 
       .titchy.link.title {
+        align-self: start;
         color: C(accent);
         font-size: 1.25em;
         font-weight: bold;
@@ -170,7 +171,6 @@
       }
 
       .foot {
-        align-self: stretch;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;

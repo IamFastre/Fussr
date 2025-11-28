@@ -53,5 +53,9 @@
   "routes_settings": "Settings",
   "welcome": "Welcome to {name}!",
   "question_follow": "Follow",
-  "question_following": "Unfollow"
+  "question_following": "Unfollow",
+  "home_greetings": "Hey there, <span class=\"user\">{user}</span>!",
+  "home_greetings_desc": "You can help others or ask a question of your own.",
+  "home_oh_visitor": "Visitor",
+  "home_greetings_desc_no_auth": "To get the full benefits of the website you might want to be signed in."
 }
