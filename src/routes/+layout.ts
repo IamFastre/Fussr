@@ -23,6 +23,7 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
   ]);
 
   return {
+    user: user && user.id === data.user?.uuid ? data.user : null,
     auth: {
       isSigned: !!user,
       user:     user,

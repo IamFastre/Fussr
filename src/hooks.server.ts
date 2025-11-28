@@ -1,6 +1,6 @@
 import { createServerClient as createAnonClient } from '@supabase/ssr';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
-import { type Handle, redirect } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 import { PRIVATE_SUPABASE_ADMIN_KEY } from '$env/static/private';
@@ -9,24 +9,25 @@ import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/publi
 import type { Database } from '$/supabase/types';
 import { paraglideMiddleware } from '@/paraglide/server';
 
-// Directories that will not need auth and won't redirect to login
-const AUTHLESS_DIRECTORIES = [
-  '/',
-  '/about',
-  '/auth/?.*',
+// // Directories that will not need auth and won't redirect to login
+// const AUTHLESS_DIRECTORIES = [
+//   '/',
+//   '/about',
+//   '/auth/?.*',
+//   '/questions/[a-z0-9-]+',
 
-  '/api/auth/?.*',
-  '/api/other/ping',
-  '/api/users/[a-z0-9._-]+',
-  '/api/users/[a-z0-9._-]+/avatar',
-];
+//   '/api/auth/?.*',
+//   '/api/other/ping',
+//   '/api/users/[a-z0-9._-]+',
+//   '/api/users/[a-z0-9._-]+/avatar',
+// ];
 
-const isAuthless = (dir: string) => {
-  return AUTHLESS_DIRECTORIES.some(authless => {
-    const reg = new RegExp(`^${authless}$`);
-    return reg.test(dir);
-  });
-};
+// const isAuthless = (dir: string) => {
+//   return AUTHLESS_DIRECTORIES.some(authless => {
+//     const reg = new RegExp(`^${authless}$`, 'gi');
+//     return reg.test(dir);
+//   });
+// };
 
 const supabase: Handle = async ({ event, resolve }) => {
   // Creates a Supabase client specific to this server request.
@@ -72,23 +73,23 @@ const supabase: Handle = async ({ event, resolve }) => {
   });
 };
 
-const authGuard: Handle = async ({ event, resolve }) => {
-  // Suppress the `.well-known` shit.
-  // No, Chrome, it's not well-known.
-  if (event.url.pathname.startsWith( '/.well-known/appspecific'))
-    return new Response(null, { status: 204 });
+// const authGuard: Handle = async ({ event, resolve }) => {
+//   // Suppress the `.well-known` shit.
+//   // No, Chrome, it's not well-known.
+//   if (event.url.pathname.startsWith( '/.well-known/appspecific'))
+//     return new Response(null, { status: 204 });
 
-  const isSigned     = !!event.locals.auth.isSigned;
-  const requiresAuth = !isAuthless(event.url.pathname);
+//   const isSigned     = !!event.locals.auth.isSigned;
+//   const requiresAuth = !isAuthless(event.url.pathname);
 
-  // If the user has no Supabase session (i.e logged in)
-  // And the directory requires auth,
-  // redirect them to the auth page
-  if (!isSigned && requiresAuth)
-    redirect(303, '/auth');
+//   // If the user has no Supabase session (i.e logged in)
+//   // And the directory requires auth,
+//   // redirect them to the auth page
+//   if (!isSigned && requiresAuth)
+//     redirect(303, '/auth');
 
-  return resolve(event);
-};
+//   return resolve(event);
+// };
 
 const paraglide: Handle = async ({ event, resolve }) => {
 	return await paraglideMiddleware(event.request, ({ request:localizedRequest, locale }) => {
@@ -101,4 +102,4 @@ const paraglide: Handle = async ({ event, resolve }) => {
   });
 }
 
-export const handle:Handle = sequence(supabase, authGuard, paraglide);
+export const handle:Handle = sequence(supabase, paraglide);
