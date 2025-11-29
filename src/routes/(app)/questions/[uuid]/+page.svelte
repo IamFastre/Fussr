@@ -10,7 +10,7 @@
 
   import { m } from '@/paraglide/messages';
   import { getLocale } from "@/paraglide/runtime";
-  import { Markdown, Tags } from "$/components";
+  import { Markdown, NotFound, Tags } from "$/components";
   import { api, query } from "$/client/api";
   import type { VoteDirection } from "$/utils/types";
 
@@ -142,12 +142,7 @@
     </div>
   </Panel>
 {:else}
-  <Panel class="not-fount">
-    <CircleX />
-    <span>
-      {@html m.questions_not_found({ uuid })}
-    </span>
-  </Panel>
+  <NotFound message={m.questions_not_found({ uuid })} />
 {/if}
 
 <style lang="scss">
@@ -266,25 +261,6 @@
       min-width: 0;
       padding: 10px;
       gap: 10px;
-    }
-  }
-
-  :global
-  .titchy.panel.not-fount {
-    flex: 1;
-    @include flex-center();
-
-    svg {
-      color: C(danger);
-      @include size(5rem);
-    }
-
-    .uuid {
-      color: C(accent);
-      background-color: C(accent, 10%);
-      padding: 2.5px;
-      border-radius: 5px;
-      font-family: FiraCode;
     }
   }
 </style>

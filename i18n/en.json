@@ -46,7 +46,7 @@
   "question_answers": "Answers",
   "question_followers": "Follows",
   "question_score": "Score",
-  "questions_not_found": "No question with UUID <span class=\"uuid\">{uuid}</span> exists.",
+  "questions_not_found": "No question with UUID: <span class=\"accent\">{uuid}</span> found.",
   "routes_about": "About",
   "routes_home": "Home",
   "routes_me": "Me",
@@ -57,5 +57,6 @@
   "home_greetings": "Hey there, <span class=\"user\">{user}</span>!",
   "home_greetings_desc": "You can help others or ask a question of your own.",
   "home_oh_visitor": "Visitor",
-  "home_greetings_desc_no_auth": "To get the full benefits of the website you might want to be signed in."
+  "home_greetings_desc_no_auth": "To get the full benefits of the website you might want to be signed in.",
+  "user_not_found": "No user with username: <span class=\"accent\">{user}</span> found."
 }
