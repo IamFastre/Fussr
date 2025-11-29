@@ -32,8 +32,8 @@ export async function getQuestionByUUID(uuid: string) {
   ]);
 
   const question = promises[0].data;
-  const vote = promises[1].data;
-  const follow = promises[2].data;
+  const vote     = promises[1].data;
+  const follow   = promises[2].data;
 
   if (!question)
     return null;

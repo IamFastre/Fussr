@@ -88,3 +88,16 @@ export type QuestionPersonal = QuestionPublic & {
   vote:   VoteDirection;
   follow: boolean;
 };
+
+export type AnswerPublic = {
+  uuid:       Tables<'answers'>['uuid'];
+  body:       Tables<'answers'>['body'];
+  score:      Tables<'answers'>['score'];
+  question:   Tables<'answers'>['question'];
+  author:     Tables<'answers'>['author'];
+  created_at: Tables<'answers'>['created_at'];
+};
+
+export type AnswerPersonal = AnswerPublic & {
+  vote: VoteDirection;
+};

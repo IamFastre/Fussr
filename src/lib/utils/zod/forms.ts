@@ -58,7 +58,7 @@ export const QuestionForm = z.object({
     .min(16).max(160)
     .trim(),
   body: z.string()
-    .min(160).max(2000)
+    .min(160).max(3000)
     .trim(),
   tags: z.array(
     z.string()
@@ -66,4 +66,15 @@ export const QuestionForm = z.object({
       .regex(/^[a-z0-9-]+$/)
       .trim()
   ),
+});
+
+/* ========================================================================== */
+
+export type AnswerForm = z.infer<typeof AnswerForm>;
+
+export const AnswerForm = z.object({
+  question: z.uuid(),
+  body: z.string()
+    .min(90).max(3000)
+    .trim(),
 });

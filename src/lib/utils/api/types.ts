@@ -1,5 +1,5 @@
-import type { JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic } from "$/utils/types";
-import type { QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
+import type { AnswerPersonal, AnswerPublic, JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic } from "$/utils/types";
+import type { AnswerForm, QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
 export type Endpoints = OmitNever<{
@@ -101,6 +101,22 @@ type EndpointsMap = {
     Args:   undefined;
     Return: "OK";
   };
+
+  "/questions/[uuid]/answer": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   Pick<AnswerForm, 'body'>;
+    Return: AnswerPublic;
+  };
+
+  "/questions/[uuid]/answers": {
+    Method: 'GET';
+    Params: { uuid:string };
+    Args:   { page?:number };
+    Return: { list:AnswerPersonal[], total:number };
+  };
+
+  /* ======================================================================== */
 
   "/questions/latest": {
     Method: 'GET';
