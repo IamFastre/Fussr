@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Panel } from "titchy";
+  import { Button, ButtonGroup, Panel } from "titchy";
   import { AtSign, Earth, Clock } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
@@ -68,7 +68,17 @@
   </Panel>
 
   <Panel class="activity-card">
-    <!-- Activity content goes here -->
+    <ButtonGroup class="activity-buttons">
+      <Button variant="secondary" rounded>
+        Questions
+      </Button>
+      <Button variant="secondary" rounded>
+        Answers
+      </Button>
+      <Button variant="secondary" rounded>
+        Votes
+      </Button>
+    </ButtonGroup>
   </Panel>
 {:else}
   <NotFound message={m.user_not_found({ user:page.params.username ?? '' })} />
@@ -164,5 +174,20 @@
   :global
   .titchy.panel.activity-card {
     flex: 1;
+    padding: 10px;
+    overflow: hidden;
+
+    .activity-buttons {
+      flex-direction: row;
+      padding: 7.5px;
+      background-color: C(accent, 10%);
+      border-radius: 15px;
+
+      .titchy.button {
+        @include size(auto, 'all');
+        flex: 1;
+        font-size: 0.75em;
+      }
+    }
   }
 </style>

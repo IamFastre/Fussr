@@ -10,7 +10,7 @@
 
   import { m } from '@/paraglide/messages';
   import { getLocale } from "@/paraglide/runtime";
-  import { Markdown, NotFound, Tags } from "$/components";
+  import { Answers, Markdown, NotFound, Tags } from "$/components";
   import { api, query } from "$/client/api";
   import type { VoteDirection } from "$/utils/types";
 
@@ -141,6 +141,7 @@
       <Tags tags={question.tags} />
     </div>
   </Panel>
+  <Answers {question} />
 {:else}
   <NotFound message={m.questions_not_found({ uuid })} />
 {/if}

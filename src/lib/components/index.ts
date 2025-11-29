@@ -1,3 +1,4 @@
+export * from "./Answers";
 export * from "./Footer";
 export * from "./Markdown";
 export * from "./Navbar";
