@@ -1,7 +1,7 @@
 :root[data-theme="default"] {
-  --xxx-theme-name:   "Default";
-  --xxx-theme-scheme: "dark";
-  --xxx-theme-assets: "light";
+  --fussr-theme-name:   "Default";
+  --fussr-theme-scheme: "dark";
+  --fussr-theme-assets: "light";
 
   /*** COlORS ***/
   // Monochrome
@@ -20,7 +20,7 @@
   --fussr-value-safe-inset-bottom: env(safe-area-inset-bottom);
   --fussr-value-safe-inset-right:  env(safe-area-inset-right);
   // Radii
-  --fussr-value-radius-min: min(0dvh,  0dvw  );
+  --fussr-value-radius-min: min(0dvh,  0dvw   );
   --fussr-value-radius-1:    5px;
   --fussr-value-radius-2:   10px;
   --fussr-value-radius-3:   25px;
