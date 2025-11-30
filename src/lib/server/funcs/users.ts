@@ -170,9 +170,9 @@ export async function editUser(args: ProfileEditForm) {
     )
 
   if (avatar) {
-    console.log(await supabase.admin.storage
+    await supabase.admin.storage
       .from('avatars')
-      .update(`${auth.user.id}.png`, await compressAvatar(avatar)))
+      .update(`${auth.user.id}.png`, await compressAvatar(avatar))
   }
 
   return auth.user.id;

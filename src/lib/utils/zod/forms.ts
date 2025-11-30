@@ -67,7 +67,7 @@ export const QuestionForm = z.object({
     .trim(),
   tags: z.array(
     z.string()
-      .min(2).max(35)
+      .min(1).max(35)
       .regex(/^[a-z0-9-]+$/)
       .trim()
   ),

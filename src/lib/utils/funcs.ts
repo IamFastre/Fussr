@@ -92,3 +92,22 @@ export function blobToDataURL(blob: Blob): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+export function getTagList(input: string) {
+  const tags: string[] = []
+  const tagsToAdd = input.split(/,\s*/).map(t => t.trim());
+
+  for (let tag of tagsToAdd) if (tag.length) {
+    tag = tag
+      .replace(/[^a-z0-9]/gi, '-')
+      .replace(/(^-)|(-$)/g, "")
+      .toLowerCase();
+
+    if (!tags.includes(tag)) {
+      tags.push(tag);
+      input = "";
+    }
+  }
+
+  return tags;
+}
