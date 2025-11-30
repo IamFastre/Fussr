@@ -32,6 +32,43 @@ export async function answerQuestion(answer: AnswerForm) {
   } satisfies AnswerPublic;
 }
 
+export async function voteAnswer({ answer, vote }: { answer: string, vote: 'up' | 'down' | 'none' }) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  if (vote === 'none') {
+    const res = await supabase.admin
+      .from('answer_votes')
+      .delete({ })
+      .eq('author', auth.user.id)
+      .eq('answer', answer)
+      .select('*')
+      .single();
+
+    if (!res.data)
+      return null;
+
+    return res.data.uuid;
+  }
+
+  else {
+    const res = await supabase.admin
+      .from('answer_votes')
+      .insert({ author:auth.user.id, answer, sign:vote === 'up' })
+      .select('*')
+      .single();
+
+    if (!res.data)
+      return null;
+
+    return res.data.uuid;
+  }
+}
+
+
 export async function getQuestionAnswers({ question, page }: { question:string, page:number }) {
   const event = getRequestEvent();
 
@@ -53,11 +90,13 @@ export async function getQuestionAnswers({ question, page }: { question:string, 
         return supabase.admin
           .from('answer_votes')
           .select('*')
-          .eq('user', auth.user?.id ?? '')
+          .eq('author', auth.user?.id ?? '')
           .eq('answer', a.uuid)
           .single()
       })
   );
+
+  console.log(votes[0].error)
 
   const list = answers.data.map((a, i) => ({
     uuid:       a.uuid,
