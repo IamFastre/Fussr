@@ -156,25 +156,35 @@
 
     .title-foot {
       flex-direction: row;
-      align-items: center;
+      align-items: ends;
+      justify-content: space-between;
       gap: 2ch;
 
-      > * {
+      .author {
         flex-direction: row;
         align-items: center;
         gap: 0.5ch;
 
-        font-size: 0.85em;
+        color: C(accent);
+        font-size: 1em;
 
-        img { border-radius: 15%; }
-
-        img, svg {
-          @include size(1.33em);
-          color: C(accent);
+        img {
+          border-radius: 15%;
+          @include size(1.75em);
         }
+      }
 
-        span {
-          color: C(accent);
+
+      .timestamp {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5ch;
+
+        color: C(secondary, 70%);
+        font-size: 0.66em;
+
+        svg {
+          @include size(1.25em);
         }
       }
     }

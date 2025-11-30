@@ -6,7 +6,7 @@ import { getRequestEvent } from "$app/server";
 
 export async function answerQuestion(answer: AnswerForm) {
   const event = getRequestEvent();
-  console.log(answer)
+
   const { supabase, auth } = event.locals;
   const { success, data } = AnswerForm.safeParse(answer);
 
@@ -16,7 +16,7 @@ export async function answerQuestion(answer: AnswerForm) {
   const res = await supabase.admin
     .from('answers')
     .insert({ body: data.body, question: data.question, author: auth.user.id })
-    .select('*')
+    .select('*, author:users(*)')
     .single();
 
   if (!res.data)

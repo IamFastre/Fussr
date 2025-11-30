@@ -53,7 +53,7 @@
     else {
       // TODO: add proper errors like in auth pages
       toaster.add({ type: 'error', content: m.generic_error_occurred() });
-      console.log(error);
+      console.error(error);
     }
 
     loading = false;

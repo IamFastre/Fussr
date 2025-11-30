@@ -94,7 +94,7 @@ export type AnswerPublic = {
   body:       Tables<'answers'>['body'];
   score:      Tables<'answers'>['score'];
   question:   Tables<'answers'>['question'];
-  author:     Tables<'answers'>['author'];
+  author:     UserPublic;
   created_at: Tables<'answers'>['created_at'];
 };
 

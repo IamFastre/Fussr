@@ -1,19 +1,24 @@
 <script lang="ts">
-  import Prism from "prismjs";
+  import "prismjs";
+  import { AutoLoader } from 'svelte-prism-autoloader';
   import "prism-svelte";
 
+  import _ from "lodash";
   import { marked, Renderer, type Tokens } from "marked";
 
   interface Props {
     content: string;
   }
 
-  const { content }: Props = $props();
+  let { content }: Props = $props();
+
+  const code = (lang: string, content: string) => (
+    `<pre><span class="lang">${lang.toUpperCase()}</span><code class="language-${lang}">${content}</code></pre>`
+  );
 
   class FussrRenderer extends Renderer {
     code({ lang = "txt", text }: Tokens.Code): string {
-      const content = Prism.highlight(text, Prism.languages[lang], lang);
-      return `<pre><span class="lang">${lang}</span><code>${content}</code></pre>`;
+      return code(lang, _.escape(text));
     }
   }
 
@@ -23,8 +28,10 @@
   });
 </script>
 
+
 <div class="markdown">
   {@html marked(content, { renderer })}
+  <AutoLoader autoHighlightAll />
 </div>
 
 <style lang="scss">
@@ -37,6 +44,8 @@
     align-items: stretch;
     overflow: hidden;
     gap: 0.75em;
+    word-break: break-all;
+    word-break: break-word;
 
     :global {
       hr {
