@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Button, ButtonGroup, Loading, Panel } from "titchy";
-  import { AtSign, Earth, Clock } from "@lucide/svelte";
+  import { Button, ButtonGroup, Loading, Pager, Panel } from "titchy";
+  import { AtSign, Earth, Clock, HeartCrack } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
-  import { COUNTRIES, entries } from "$/utils";
+  import { COUNTRIES, entries, LATEST_QUESTIONS_LIMIT } from "$/utils";
   import type { UserPublic } from "$/utils/types";
   import { query } from "$/client/api";
   import { Answer, NotFound, Question } from "$/components";
@@ -25,28 +25,52 @@
   }
 
   const TABS = {
-    questions: {
-      name: m.profile_questions(),
-      snippet: questions,
-    },
-
-    answers: {
-      name: m.profile_answers(),
-      snippet: answers,
-    },
-
-    votes: {
-      name: m.profile_votes(),
-      snippet: votes,
-    },
+    questions: { name: m.profile_questions(), snippet: questions, },
+    answers: { name: m.profile_answers(), snippet: answers, },
+    votes: { name: m.profile_votes(), snippet: votes, },
   } satisfies Tabs;
 
   const userQuery = query({ method:'GET', path:'/users/[username]', params:{ username:userInit?.username! } }, userInit!);
 
+  const pages = $state({
+    questions: 1,
+    answers:   1,
+    votes:     1,
+  });
+
   const queries = {
-    questions: query({ method:'GET', path:'/users/[username]/questions', params:{ username:userInit?.username! } }, undefined, { enabled:false }),
-    answers:   query({ method:'GET', path:'/users/[username]/answers',   params:{ username:userInit?.username! } }, undefined, { enabled:false }),
-    votes:     query({ method:'GET', path:'/users/[username]/votes',     params:{ username:userInit?.username! } }, undefined, { enabled:false }),
+    questions: query(
+      () => ({
+        method: 'GET',
+        path: '/users/[username]/questions',
+        params: { username:userInit?.username! },
+        args: { page:pages.questions }
+      }),
+      undefined,
+      { enabled:false }
+    ),
+
+    answers: query(
+      () => ({
+        method: 'GET',
+        path: '/users/[username]/answers',
+        params: { username:userInit?.username! },
+        args: { page:pages.answers }
+      }),
+      undefined,
+      { enabled:false }
+    ),
+
+    votes: query(
+      () => ({
+        method: 'GET',
+        path: '/users/[username]/votes',
+        params: { username:userInit?.username! },
+        args: { page:pages.votes }
+      }),
+      undefined,
+      { enabled:false }
+    ),
   }
 
   const locale = getLocale();
@@ -61,35 +85,74 @@
 
 {#snippet questions()}
   {@const query = queries['questions']}
+  {@const total = query.data?.total ?? 0}
+
   {#if query.isLoading}
     <Loading flexible />
   {:else}
     {#each query.data?.list as question, i (i)}
       <Question {question} authorless />
+    {:else}
+      <div class="no-items">
+        <HeartCrack />
+        <span>{m.profile_nothing_yet()}</span>
+      </div>
     {/each}
   {/if}
+  <div class="sep"></div>
+  <Pager
+    bind:value={pages.questions}
+    min={1} max={Math.ceil(total / LATEST_QUESTIONS_LIMIT)}
+    label="$page$"
+  />
 {/snippet}
 
 {#snippet answers()}
   {@const query = queries['answers']}
+  {@const total = query.data?.total ?? 0}
+
   {#if query.isLoading}
     <Loading flexible />
   {:else}
     {#each query.data?.list as answer, i (i)}
       <Answer {answer} question={answer.question} authorless />
+    {:else}
+      <div class="no-items">
+        <HeartCrack />
+        <span>{m.profile_nothing_yet()}</span>
+      </div>
     {/each}
   {/if}
+  <div class="sep"></div>
+  <Pager
+    bind:value={pages.questions}
+    min={1} max={Math.ceil(total / LATEST_QUESTIONS_LIMIT)}
+    label="$page$"
+  />
 {/snippet}
 
 {#snippet votes()}
   {@const query = queries['votes']}
+  {@const total = query.data?.total ?? 0}
+
   {#if query.isLoading}
     <Loading flexible />
   {:else}
     {#each query.data?.list as vote, i (i)}
       <Question question={vote.question} my-vote={vote.sign} bodyless />
+    {:else}
+      <div class="no-items">
+        <HeartCrack />
+        <span>{m.profile_nothing_yet()}</span>
+      </div>
     {/each}
   {/if}
+  <div class="sep"></div>
+  <Pager
+    bind:value={pages.questions}
+    min={1} max={Math.ceil(total / LATEST_QUESTIONS_LIMIT)}
+    label="$page$"
+  />
 {/snippet}
 
 {#if user}
@@ -257,6 +320,20 @@
         @include size(auto, 'all');
         flex: 1;
         font-size: 0.75em;
+      }
+    }
+
+    .sep { flex: 1; }
+
+    .no-items {
+      flex: 1000;
+      @include flex-center();
+      color: C(accent);
+      gap: 10px;
+      opacity: 0.35;
+
+      svg {
+        @include size(3em);
       }
     }
   }
