@@ -11,7 +11,8 @@
 
   const signOut = async () => {
     await api({ method:'POST', path:'/auth/sign-out' });
-    await goto("/");
+    await goto("/", { invalidateAll:true });
+    location.reload()
   };
 </script>
 

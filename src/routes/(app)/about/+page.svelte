@@ -2,7 +2,9 @@
 </script>
 
 <div class="me">
-  ABOUT
+  <span>DIDN'T HAVE TIME FOR THIS</span>
+  <span>I BLAME عبمعطي</span>
+  <span class="hidden">Hi, نور</span>
 </div>
 
 <style lang="scss">
@@ -11,5 +13,11 @@
   .me {
     flex: 1;
     @include flex-center();
+    direction: ltr;
+
+    .hidden {
+      color: transparent;
+      margin-top: 10px;
+    }
   }
 </style>
