@@ -1,3 +1,4 @@
+export * from "./Answer";
 export * from "./Answers";
 export * from "./Footer";
 export * from "./Markdown";

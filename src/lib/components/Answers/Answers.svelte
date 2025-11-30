@@ -3,7 +3,8 @@
 
   import { m } from "@/paraglide/messages";
   import type { QuestionPersonal } from "$/utils/types";
-  import { api } from "$/client/api";
+  import { api, query } from "$/client/api";
+  import { Answer } from "$/components";
 
   interface Props {
     question: QuestionPersonal;
@@ -13,23 +14,34 @@
 
   const toaster = useToaster();
 
-  let loading     = $state(false);
+  let submitting  = $state(false);
+  let page        = $state(1);
   let answerInput = $state('');
 
+  const answersQuery = query(() => ({
+    method: 'GET',
+    path: '/questions/[uuid]/answers',
+    params: { uuid:question.uuid },
+    args: { page }
+  }));
+
+  const answers = $derived(answersQuery.data ?? { list:[], total:0 });
+
   const onSubmitAnswer = async () => {
-    loading = true;
+    submitting = true;
 
     const args   = { body:answerInput };
     const params = { uuid:question.uuid };
 
     const res = await api({ method:'POST', path:'/questions/[uuid]/answer', params, args });
+    await answersQuery.refetch();
 
     if (res.error)
       toaster.add({ type: 'error', content: m.generic_error_occurred() });
     else
       answerInput = '';
 
-    loading = false;
+    submitting = false;
   };
 </script>
 
@@ -39,16 +51,23 @@
       <Textarea
         bind:value={answerInput}
         placeholder={m.ask_your_answer_placeholder()}
-        disabled={loading}
+        disabled={submitting}
       />
     </InputWrapper>
     <div class="actions">
-      <Button scaling={false} onclick={onSubmitAnswer} disabled={loading}>
+      <Button scaling={false} onclick={onSubmitAnswer} disabled={submitting}>
         {m.ask_submit()}
       </Button>
     </div>
   </div>
-  <Separator variant="secondary" line="dashed" />
+  {#if answers.total}
+    <Separator variant="secondary" line="dashed" />
+  {/if}
+  <div class="answer-array">
+    {#each answers.list as answer}
+      <Answer {answer} {question} onVote={async () => void await answersQuery.refetch()} />
+    {/each}
+  </div>
 </Panel>
 
 <style lang="scss">
@@ -71,6 +90,10 @@
           width: 175px;
         }
       }
+    }
+
+    .answer-array {
+      gap: 10px;
     }
   }
 </style>

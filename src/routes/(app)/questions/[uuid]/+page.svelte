@@ -25,11 +25,11 @@
 
   const question = $derived(questionQuery.data ?? data.question);
   const author   = $derived(question?.author);
-  const time     = $derived(dayjs(question?.created_at ?? "").locale(locale));
   const isAuthor = $derived(data.auth.user?.id === question?.author.uuid);
+  const time     = $derived(dayjs(question?.created_at ?? "").locale(locale));
+  const vote     = $derived<VoteDirection>(question?.vote ?? 'none');
+  const follow   = $derived<boolean>(!!question?.follow);
 
-  let vote    = $derived<VoteDirection>(question?.vote ?? 'none');
-  let follow  = $derived<boolean>(!!question?.follow);
   let loading = $state<boolean>(false);
 
   const onVote = (dir: 'up' | 'down') => async () => {
@@ -82,7 +82,7 @@
 
   <Panel class="question-body">
     <div class="sidebar">
-      <Button variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
+      <Button class="up" variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
         <ArrowUp />
       </Button>
       <div class="score">
@@ -93,7 +93,7 @@
           {m.question_score()}
         </span>
       </div>
-      <Button variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
+      <Button class="down" variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
         <ArrowDown />
       </Button>
       <Separator variant="secondary" line="dashed" />
@@ -223,6 +223,12 @@
       //     justify-content: center;
       //   }
       // }
+
+      > .button {
+        --button-accent-color: #{C(secondary)};
+        &.primary.up   { --button-accent-color: #{C(success)}; }
+        &.primary.down { --button-accent-color: #{C(danger)};  }
+      }
 
       .score {
         align-items: center;
