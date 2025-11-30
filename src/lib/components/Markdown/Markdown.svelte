@@ -75,6 +75,7 @@
         padding: 5px;
         font-size: smaller;
         font-family: FiraCode;
+        overflow: visible;
 
         span.lang { color: C(accent); }
 

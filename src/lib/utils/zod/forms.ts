@@ -75,6 +75,6 @@ export type AnswerForm = z.infer<typeof AnswerForm>;
 export const AnswerForm = z.object({
   question: z.uuid(),
   body: z.string()
-    .min(90).max(3000)
+    .min(60).max(3000)
     .trim(),
 });

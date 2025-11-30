@@ -22,9 +22,8 @@
 
   const locale = getLocale();
 
-  const author = $derived(question.author);
-  const time   = $derived(dayjs(question.created_at).locale(locale));
-
+  const author    = $derived(question.author);
+  const time      = $derived(dayjs(question.created_at).locale(locale));
   const scoreSign = $derived(question.score > 0 ? "+" : question.score < 0 ? "-" : "");
 </script>
 
