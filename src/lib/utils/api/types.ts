@@ -1,4 +1,4 @@
-import type { AnswerPersonal, AnswerPublic, JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic } from "$/utils/types";
+import type { AnswerDetailed, AnswerPersonal, AnswerPublic, JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic, VoteDetailed } from "$/utils/types";
 import type { AnswerForm, QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
@@ -77,6 +77,27 @@ type EndpointsMap = {
     Params: { username: string };
     Args:   undefined;
     Return: UserPublic;
+  };
+
+  "/users/[username]/questions": {
+    Method: 'GET';
+    Params: { username: string };
+    Args:   { page?:number };
+    Return: { list:QuestionPublic[], total:number };
+  };
+
+  "/users/[username]/answers": {
+    Method: 'GET';
+    Params: { username: string };
+    Args:   { page?:number };
+    Return: { list:AnswerDetailed[], total:number };
+  };
+
+  "/users/[username]/votes": {
+    Method: 'GET';
+    Params: { username: string };
+    Args:   { page?:number };
+    Return: { list:VoteDetailed[], total:number };
   };
 
   /* ======================================================================== */

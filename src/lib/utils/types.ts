@@ -72,6 +72,8 @@ export type UserPublic = {
   created_at:   Tables<'users'>['created_at'];
 }
 
+/* ========================================================================== */
+
 export type QuestionPublic = {
   uuid:       Tables<'questions'>['uuid'];
   title:      Tables<'questions'>['title'];
@@ -89,6 +91,8 @@ export type QuestionPersonal = QuestionPublic & {
   follow: boolean;
 };
 
+/* ========================================================================== */
+
 export type AnswerPublic = {
   uuid:        Tables<'answers'>['uuid'];
   body:        Tables<'answers'>['body'];
@@ -101,4 +105,22 @@ export type AnswerPublic = {
 
 export type AnswerPersonal = AnswerPublic & {
   vote: VoteDirection;
+};
+
+export type AnswerDetailed = AnswerPublic & {
+  question: QuestionPublic;
+};
+
+/* ========================================================================== */
+
+export type VotePublic = {
+  uuid:       Tables<'question_votes'>['uuid'];
+  sign:       VoteDirection;
+  author:     Tables<'question_votes'>['author'];
+  question:   Tables<'question_votes'>['question'];
+  created_at: Tables<'question_votes'>['created_at'];
+};
+
+export type VoteDetailed = VotePublic & {
+  question: QuestionPublic;
 };
