@@ -107,7 +107,7 @@
   {/if}
   <div class="content">
     {#if authorless}
-      <Link class="question-title" variant="wrapper">
+      <Link class="question-title" variant="wrapper" href="/questions/{question.uuid}">
         <span>
           {question.title}
         </span>

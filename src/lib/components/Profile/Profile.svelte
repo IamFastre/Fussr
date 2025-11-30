@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { Button, ButtonGroup, Panel } from "titchy";
+  import { Button, ButtonGroup, Loading, Panel } from "titchy";
   import { AtSign, Earth, Clock } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
-  import { COUNTRIES } from "$/utils";
+  import { COUNTRIES, entries } from "$/utils";
   import type { UserPublic } from "$/utils/types";
   import { query } from "$/client/api";
-  import { NotFound } from "$/components";
+  import { Answer, NotFound, Question } from "$/components";
   import { page } from "$app/state";
+  import type { Snippet } from "svelte";
 
   interface Props {
     user: UserPublic | null;
@@ -16,12 +17,80 @@
 
   const { user:userInit }: Props = $props();
 
+  type Tabs = {
+    [K: string]: {
+      name: string;
+      snippet: Snippet;
+    }
+  }
+
+  const TABS = {
+    questions: {
+      name: m.profile_questions(),
+      snippet: questions,
+    },
+
+    answers: {
+      name: m.profile_answers(),
+      snippet: answers,
+    },
+
+    votes: {
+      name: m.profile_votes(),
+      snippet: votes,
+    },
+  } satisfies Tabs;
 
   const userQuery = query({ method:'GET', path:'/users/[username]', params:{ username:userInit?.username! } }, userInit!);
-  const locale    = getLocale();
 
-  const user = $derived(userQuery.data ?? userInit);
+  const queries = {
+    questions: query({ method:'GET', path:'/users/[username]/questions', params:{ username:userInit?.username! } }, undefined, { enabled:false }),
+    answers:   query({ method:'GET', path:'/users/[username]/answers',   params:{ username:userInit?.username! } }, undefined, { enabled:false }),
+    votes:     query({ method:'GET', path:'/users/[username]/votes',     params:{ username:userInit?.username! } }, undefined, { enabled:false }),
+  }
+
+  const locale = getLocale();
+
+  let curTab   = $state<keyof typeof TABS>('questions');
+  const user   = $derived(userQuery.data ?? userInit);
+
+  $effect(() => {
+    queries[curTab].refetch();
+  })
 </script>
+
+{#snippet questions()}
+  {@const query = queries['questions']}
+  {#if query.isLoading}
+    <Loading flexible />
+  {:else}
+    {#each query.data?.list as question, i (i)}
+      <Question {question} authorless />
+    {/each}
+  {/if}
+{/snippet}
+
+{#snippet answers()}
+  {@const query = queries['answers']}
+  {#if query.isLoading}
+    <Loading flexible />
+  {:else}
+    {#each query.data?.list as answer, i (i)}
+      <Answer {answer} question={answer.question} authorless />
+    {/each}
+  {/if}
+{/snippet}
+
+{#snippet votes()}
+  {@const query = queries['votes']}
+  {#if query.isLoading}
+    <Loading flexible />
+  {:else}
+    {#each query.data?.list as vote, i (i)}
+      <Question question={vote.question} my-vote={vote.sign} bodyless />
+    {/each}
+  {/if}
+{/snippet}
 
 {#if user}
   <Panel variant="secondary" class="info-card" borderless>
@@ -69,16 +138,17 @@
 
   <Panel class="activity-card">
     <ButtonGroup class="activity-buttons">
-      <Button variant="secondary" rounded>
-        Questions
-      </Button>
-      <Button variant="secondary" rounded>
-        Answers
-      </Button>
-      <Button variant="secondary" rounded>
-        Votes
-      </Button>
+      {#each entries(TABS) as [id, info], i (i)}
+        <Button
+          variant={id === curTab ? "primary" : "secondary"}
+          onclick={() => curTab = id}
+          rounded
+        >
+          {info.name}
+        </Button>
+      {/each}
     </ButtonGroup>
+    {@render TABS[curTab].snippet()}
   </Panel>
 {:else}
   <NotFound message={m.user_not_found({ user:page.params.username ?? '' })} />
