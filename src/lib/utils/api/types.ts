@@ -1,5 +1,5 @@
 import type { AnswerDetailed, AnswerPersonal, AnswerPublic, JSON, OmitNever, QuestionPersonal, QuestionPublic, UserPublic, VoteDetailed } from "$/utils/types";
-import type { AnswerForm, QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
+import type { AnswerForm, ProfileEditForm, QuestionForm, RecoveryForm, SignInForm, SignUpForm } from "$/utils/zod/forms";
 
 
 export type Endpoints = OmitNever<{
@@ -71,6 +71,20 @@ type EndpointsMap = {
   };
 
   /* ======================================================================== */
+
+  "/users/edit": {
+    Method: 'POST';
+    Params: undefined;
+    Args:   ProfileEditForm;
+    Return: "OK";
+  };
+
+  "/users/reset-avatar": {
+    Method: 'POST';
+    Params: undefined;
+    Args:   undefined;
+    Return: "OK";
+  };
 
   "/users/[username]": {
     Method: 'GET';

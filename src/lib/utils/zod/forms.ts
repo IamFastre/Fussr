@@ -1,5 +1,10 @@
 import z from "zod";
 
+import { COUNTRIES } from "../consts";
+import { keys } from "../funcs";
+
+/* ========================================================================== */
+
 export type UsernameShape = z.infer<typeof UsernameShape>;
 
 export const UsernameShape = z.string()
@@ -77,4 +82,20 @@ export const AnswerForm = z.object({
   body: z.string()
     .min(60).max(3000)
     .trim(),
+});
+
+/* ========================================================================== */
+
+export type ProfileEditForm = z.infer<typeof ProfileEditForm>;
+
+export const ProfileEditForm = z.object({
+  avatar: z.url({ protocol:/^data$/ })
+    .nullable(),
+  display_name: z.string()
+    .min(0).max(35)
+    .trim(),
+  bio: z.string()
+    .min(0).max(512)
+    .trim(),
+  country: z.enum(keys(COUNTRIES))
 });
