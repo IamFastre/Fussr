@@ -4,12 +4,12 @@
   import "dayjs/locale/en";
   import "dayjs/locale/ar";
 
-  import { Button, ButtonGroup, Link, Panel, useToaster } from "titchy";
+  import { Button, ButtonGroup, Link, Panel, Separator, useToaster } from "titchy";
   import { ArrowDown, ArrowUp, Calendar, Check, CircleCheckBig, Pencil, Trash } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
-  import type { AnswerPersonal, QuestionPublic, VoteDirection } from "$/utils/types";
+  import type { AnswerPersonal, AnswerPublic, QuestionPublic, VoteDirection } from "$/utils/types";
   import { Markdown } from "$/components";
   import { page } from "$app/state";
   import { api } from "$/client/api";
@@ -17,12 +17,13 @@
   dayjs.extend(relativeTime);
 
   interface Props {
-    answer:   AnswerPersonal;
-    question: QuestionPublic;
-    refetch?:  () => Promise<void>;
+    answer:      AnswerPersonal | AnswerPublic;
+    question:    QuestionPublic;
+    authorless?: boolean;
+    refetch?:    () => Promise<void>;
   }
 
-  const { answer, question, refetch }: Props = $props();
+  const { answer, question, authorless, refetch }: Props = $props();
 
   const toaster = useToaster();
   const locale = getLocale();
@@ -30,7 +31,7 @@
   const author    = $derived(answer.author);
   const isAsker   = $derived(page.data.auth.user?.id === question.author.uuid);
   const isAuthor  = $derived(page.data.auth.user?.id === author.uuid);
-  const vote      = $derived<VoteDirection>(answer?.vote ?? 'none');
+  const vote      = $derived<VoteDirection | undefined>((answer as AnswerPersonal).vote ? (answer as AnswerPersonal).vote : undefined);
   const time      = $derived(dayjs(answer.created_at).locale(locale));
   const scoreSign = $derived(answer.score > 0 ? "+" : answer.score < 0 ? "-" : "");
 
@@ -66,56 +67,70 @@
 </script>
 
 <Panel class={["answer", { solution:answer.is_solution }]} variant="secondary" borderless={!answer.is_solution}>
-  <div class="side-actions">
-    <Button class="up" variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
-      <ArrowUp />
-    </Button>
-    <div class="score {answer.score > 0 ? 'good' : answer.score < 0 ? 'bad' : ''}">
-      <span class="count">
-        <small>{scoreSign}</small>{Math.abs(answer.score).toLocaleString()}
-      </span>
-    </div>
-    <Button class="down" variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
-      <ArrowDown />
-    </Button>
-    {#if answer.is_solution}
-      <div class="answer-check" title={m.ask_solution()}>
-        <CircleCheckBig />
+  {#if !authorless}
+    <div class="side-actions">
+      <Button class="up" variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
+        <ArrowUp />
+      </Button>
+      <div class="score {answer.score > 0 ? 'good' : answer.score < 0 ? 'bad' : ''}">
+        <span class="count">
+          <small>{scoreSign}</small>{Math.abs(answer.score).toLocaleString()}
+        </span>
       </div>
-    {/if}
-    {#if isAsker}
-      {#if !answer.is_solution}
-        <Button variant="primary" class="solution" onclick={onMarkSolution} disabled={loading}>
-          <Check />
-          {m.ask_solution()}
-        </Button>
+      <Button class="down" variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
+        <ArrowDown />
+      </Button>
+      {#if answer.is_solution}
+        <div class="answer-check" title={m.ask_solution()}>
+          <CircleCheckBig />
+        </div>
       {/if}
-    {/if}
-    {#if isAuthor}
-      <div class="author-actions">
-        <Button variant="outline">
-          <Trash />
-        </Button>
-        <Button variant="outline">
-          <Pencil />
-        </Button>
-      </div>
-    {/if}
-  </div>
+      {#if isAsker}
+        {#if !answer.is_solution}
+          <Button variant="primary" class="solution" onclick={onMarkSolution} disabled={loading}>
+            <Check />
+            {m.ask_solution()}
+          </Button>
+        {/if}
+      {/if}
+      {#if isAuthor}
+        <div class="author-actions">
+          <Button variant="outline">
+            <Trash />
+          </Button>
+          <Button variant="outline">
+            <Pencil />
+          </Button>
+        </div>
+      {/if}
+    </div>
+  {/if}
   <div class="content">
+    {#if authorless}
+      <Link class="question-title" variant="wrapper">
+        <span>
+          {question.title}
+        </span>
+      </Link>
+      <Separator variant="secondary" line="dashed" />
+    {/if}
     <div class="body">
       <Markdown content={answer.body} />
     </div>
     <div class="foot">
-      <Link class="author" variant="wrapper" href="/users/{author.username}">
-        <img
-          src={author.avatar}
-          alt="{author.avatar}'s avatar"
-        />
-        <span>
-          {author.display_name ?? author.username}
-        </span>
-      </Link>
+      {#if !authorless}
+        <Link class="author" variant="wrapper" href="/users/{author.username}">
+          <img
+            src={author.avatar}
+            alt="{author.avatar}'s avatar"
+          />
+          <span>
+            {author.display_name ?? author.username}
+          </span>
+        </Link>
+      {:else}
+        <div></div>
+      {/if}
       <div class="timestamp" title="{time.format()}">
         <Calendar />
         <time datetime="{time.toISOString()}">{time.fromNow()}</time>
@@ -198,6 +213,12 @@
       justify-content: space-between;
       gap: 10px;
       min-width: 0;
+
+      .question-title {
+        color: C(accent);
+        font-weight: bold;
+        font-size: 1.25em;
+      }
 
       .foot {
         flex-direction: row;

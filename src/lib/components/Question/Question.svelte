@@ -5,20 +5,23 @@
   import "dayjs/locale/ar";
 
   import { Link, Panel } from "titchy";
-  import { Calendar } from "@lucide/svelte";
+  import { ArrowDown, ArrowUp, Calendar } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
-  import type { QuestionPublic } from "$/utils/types";
+  import type { QuestionPublic, VoteDirection } from "$/utils/types";
   import { Markdown, Tags } from "$/components"
 
   dayjs.extend(relativeTime);
 
   interface Props {
-    question: QuestionPublic;
+    question:    QuestionPublic;
+    'my-vote'?:  VoteDirection;
+    bodyless?:   boolean;
+    authorless?: boolean;
   }
 
-  const { question }: Props = $props();
+  const { question, 'my-vote':myVote, bodyless, authorless }: Props = $props();
 
   const locale = getLocale();
 
@@ -29,49 +32,62 @@
 
 <Panel class="question" variant="secondary" borderless>
   <div class="props">
-    <div class="score">
-      <div class="count {question.score > 0 ? 'good' : question.score < 0 ? 'bad' : ''}">
-        <span>
-          <small>{scoreSign}</small>{Math.abs(question.score).toLocaleString()}
-        </span>
+    {#if !myVote}
+      <div class="score">
+        <div class="count {question.score > 0 ? 'good' : question.score < 0 ? 'bad' : ''}">
+          <span>
+            <small>{scoreSign}</small>{Math.abs(question.score).toLocaleString()}
+          </span>
+        </div>
+        <div class="label">
+          {m.question_score()}
+        </div>
       </div>
-      <div class="label">
-        {m.question_score()}
+      <div class="prop answers">
+        <div class="count">
+          {question.answers.toLocaleString()}
+        </div>
+        <div class="label">
+          {m.question_answers()}
+        </div>
       </div>
-    </div>
-    <div class="prop answers">
-      <div class="count">
-        {question.answers.toLocaleString()}
+      <div class="prop followers">
+        <div class="count">
+          {question.follows.toLocaleString()}
+        </div>
+        <div class="label">
+          {m.question_followers()}
+        </div>
       </div>
-      <div class="label">
-        {m.question_answers()}
+    {:else}
+      {@const Icon = myVote === 'up' ? ArrowUp : myVote === 'down' ? ArrowDown : undefined}
+      <div class="my-vote {myVote}">
+        <Icon />
       </div>
-    </div>
-    <div class="prop followers">
-      <div class="count">
-        {question.follows.toLocaleString()}
-      </div>
-      <div class="label">
-        {m.question_followers()}
-      </div>
-    </div>
+    {/if}
   </div>
   <div class="content">
     <Link class="title" variant="wrapper" href="/questions/{question.uuid}">
       {question.title}
     </Link>
-    <div class="body">
-      <Markdown content={question.body} />
-    </div>
+    {#if !bodyless}
+      <div class="body">
+        <Markdown content={question.body} />
+      </div>
+    {/if}
     <Tags tags={question.tags} />
     <div class="foot">
-      <Link class="author" variant="wrapper" href="/users/{author.username}">
-        <img
-          src={author.avatar}
-          alt="{author.username}'s avatar"
-        />
-        <span>{author.display_name ?? author.username}</span>
-      </Link>
+      {#if !authorless}
+        <Link class="author" variant="wrapper" href="/users/{author.username}">
+          <img
+            src={author.avatar}
+            alt="{author.username}'s avatar"
+          />
+          <span>{author.display_name ?? author.username}</span>
+        </Link>
+      {:else}
+        <div></div>
+      {/if}
       <div class="timestamp" title="{time.format()}">
         <Calendar />
         <time datetime="{time.toISOString()}">{time.fromNow()}</time>
@@ -126,6 +142,20 @@
         font-weight: bold;
 
         .count { color: C(accent); }
+      }
+
+      .my-vote {
+        flex: 1;
+        @include flex-center();
+        border-radius: 10px;
+
+        &.up   { color: C(success); background-color: C(success, 25%); }
+        &.down { color: C(danger);  background-color: C(danger,  25%); }
+
+        svg {
+          @include size(2.5em);
+          stroke-width: 3px;
+        }
       }
     }
 
