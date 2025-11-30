@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Button, ButtonGroup, Loading, Pager, Panel } from "titchy";
-  import { AtSign, Earth, Clock, HeartCrack } from "@lucide/svelte";
+  import { Button, ButtonGroup, Link, Loading, Pager, Panel } from "titchy";
+  import { AtSign, Earth, Clock, HeartCrack, Pencil } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
@@ -157,46 +157,58 @@
 
 {#if user}
   <Panel variant="secondary" class="info-card" borderless>
-    <div class="avatar">
-      <img
-        src={user.avatar}
-        alt="My avatar"
-      />
-    </div>
-    <div class="info">
-      <div class="names">
-        <span class="displayname">{user.display_name ?? user.username}</span>
-        <div class="username">
-          <AtSign />
-          <span>
-            {user.username}
-          </span>
-        </div>
+    <div class="top-part">
+      <div class="avatar">
+        <img
+          src={user.avatar}
+          alt="My avatar"
+        />
       </div>
-      {#if user.bio}
-        <span class="bio">
-          {user.bio}
-        </span>
-      {/if}
-      <div class="props">
-        {#if user.country}
-          {@const country = COUNTRIES[user.country as keyof typeof COUNTRIES]}
-          {@const name = country.name[locale] ?? country.name['en']}
-          <div class="prop since">
-            <Earth />
-            <span>{name}</span>
-            <img
-              src="https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/{user.country}.svg"
-              alt={country.emoji}
-            />
+      <div class="info">
+        <div class="names">
+          <span class="displayname">{user.display_name ?? user.username}</span>
+          <div class="username">
+            <AtSign />
+            <span>
+              {user.username}
+            </span>
           </div>
+        </div>
+        {#if user.bio}
+          <span class="bio">
+            {user.bio}
+          </span>
         {/if}
-        <div class="prop since">
-          <Clock />
-          <span>{new Date(user.created_at).toLocaleDateString()}</span>
+        <div class="props">
+          {#if user.country}
+            {@const country = COUNTRIES[user.country as keyof typeof COUNTRIES]}
+            {@const name = country.name[locale] ?? country.name['en']}
+            <div class="prop since">
+              <Earth />
+              <span>{name}</span>
+              <img
+                src="https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/images/{user.country}.svg"
+                alt={country.emoji}
+              />
+            </div>
+          {/if}
+          <div class="prop since">
+            <Clock />
+            <span>{new Date(user.created_at).toLocaleDateString()}</span>
+          </div>
         </div>
       </div>
     </div>
+    {#if page.data.auth.user?.id === user.uuid}
+      <div class="profile-actions">
+        <Link variant="wrapper" href="/me/edit">
+          <Button scaling={false}>
+            <Pencil />
+            <span>{m.generic_edit()}</span>
+          </Button>
+        </Link>
+      </div>
+    {/if}
   </Panel>
 
   <Panel class="activity-card">
@@ -222,10 +234,18 @@
 
   :global
   .titchy.panel.info-card {
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: start;
-    gap: 1em;
+    .top-part {
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: start;
+      gap: 1em;
+    }
+
+    .sep { flex: 1; }
+  }
+
+  .profile-actions {
+    justify-content: center;
   }
 
   .avatar {

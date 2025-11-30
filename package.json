@@ -43,7 +43,7 @@
 		"prism-svelte": "^0.5.0",
 		"prismjs": "^1.30.0",
 		"svelte-prism-autoloader": "^0.0.3",
-		"titchy": "^0.0.38",
+		"titchy": "^0.0.40",
 		"zod": "^4.1.12"
 	}
 }
