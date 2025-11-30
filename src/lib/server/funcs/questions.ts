@@ -155,6 +155,27 @@ export async function followQuestion(uuid: string) {
   return res.data.uuid;
 }
 
+export async function deleteQuestion({ uuid }: { uuid:string }) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  const question = await supabase.admin
+    .from('questions')
+    .delete({ })
+    .eq('uuid', uuid)
+    .eq('author', auth.user.id) // <- this makes sure the user actually owns the question
+    .select('uuid')
+    .single();
+
+  if (question.error)
+    return null;
+
+  return question.data.uuid;
+}
+
 export async function getQuestionsLatest({ page }: { page:number }) {
   const event = getRequestEvent();
 

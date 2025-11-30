@@ -22,5 +22,5 @@ export const DICEBEAR_SHAPE_COLORS = [
 
 export const COUNTRIES = CountriesJSON;
 
-export const LATEST_QUESTIONS_LIMIT = 2;
+export const LATEST_QUESTIONS_LIMIT = 10;
 export const LATEST_ANSWERS_LIMIT   = 10;

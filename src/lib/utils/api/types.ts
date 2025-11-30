@@ -123,6 +123,13 @@ type EndpointsMap = {
     Return: "OK";
   };
 
+  "/questions/[uuid]/delete": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   undefined;
+    Return: "OK";
+  };
+
   "/questions/[uuid]/answer": {
     Method: 'POST';
     Params: { uuid:string };
@@ -159,6 +166,13 @@ type EndpointsMap = {
     Method: 'POST';
     Params: { uuid:string };
     Args:   { vote:'up' | 'down' | 'none' };
+    Return: "OK";
+  };
+
+  "/answers/[uuid]/delete": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   undefined;
     Return: "OK";
   };
 

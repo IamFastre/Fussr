@@ -33,7 +33,7 @@ export async function answerQuestion(answer: AnswerForm) {
   } satisfies AnswerPublic;
 }
 
-export async function voteAnswer({ answer, vote }: { answer: string, vote: 'up' | 'down' | 'none' }) {
+export async function voteAnswer({ answer, vote }: { answer:string, vote:'up' | 'down' | 'none' }) {
   const event = getRequestEvent();
   const { supabase, auth } = event.locals;
 
@@ -46,7 +46,7 @@ export async function voteAnswer({ answer, vote }: { answer: string, vote: 'up' 
       .delete({ })
       .eq('author', auth.user.id)
       .eq('answer', answer)
-      .select('*')
+      .select('uuid')
       .single();
 
     if (!res.data)
@@ -67,6 +67,27 @@ export async function voteAnswer({ answer, vote }: { answer: string, vote: 'up' 
 
     return res.data.uuid;
   }
+}
+
+export async function deleteAnswer({ uuid }: { uuid:string }) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  const answer = await supabase.admin
+    .from('answers')
+    .delete({ })
+    .eq('uuid', uuid)
+    .eq('author', auth.user.id) // <- this makes sure the user actually owns the answer
+    .select('uuid')
+    .single();
+
+  if (answer.error)
+    return null;
+
+  return answer.data.uuid;
 }
 
 export async function markSolution({ uuid }: { uuid:string }) {
@@ -99,7 +120,7 @@ export async function markSolution({ uuid }: { uuid:string }) {
     return null;
 
   // Reset previous solution
-  const reset = await supabase.admin
+  await supabase.admin
     .from('answers')
     .update({ is_solution:false })
     .eq('question', question.data.uuid);
