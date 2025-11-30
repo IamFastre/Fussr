@@ -5,20 +5,24 @@
   import "dayjs/locale/ar";
 
   import { page } from '$app/state';
-  import { ArrowDown, ArrowUp, Calendar, CircleX, Pencil, Share, Trash } from '@lucide/svelte';
-  import { Button, ButtonGroup, Link, Panel, Separator } from 'titchy';
+  import { ArrowDown, ArrowUp, Calendar, Pencil, Link as LinkIcon, Trash, Check } from '@lucide/svelte';
+  import { Button, ButtonGroup, Link, Overlay, Panel, Separator, useToaster } from 'titchy';
 
   import { m } from '@/paraglide/messages';
   import { getLocale } from "@/paraglide/runtime";
   import { Answers, Markdown, NotFound, Tags } from "$/components";
   import { api, query } from "$/client/api";
   import type { VoteDirection } from "$/utils/types";
+  import { blur } from "svelte/transition";
+  import { goto } from "$app/navigation";
 
   dayjs.extend(relativeTime);
 
   const { data } = $props();
 
-  const locale = getLocale();
+  const toaster = useToaster();
+  const locale  = getLocale();
+
   const uuid   = $derived(page.params.uuid ?? "");
 
   const questionQuery = query(() => ({ method:'GET', path:'/questions/[uuid]', params:{ uuid } }), data.question!);
@@ -30,7 +34,9 @@
   const vote     = $derived<VoteDirection>(question?.vote ?? 'none');
   const follow   = $derived<boolean>(!!question?.follow);
 
-  let loading = $state<boolean>(false);
+  let loading    = $state<boolean>(false);
+  let copied     = $state<boolean>(false);
+  let isDeleting = $state<boolean>(false);
 
   const onVote = (dir: 'up' | 'down') => async () => {
     loading = true;
@@ -57,6 +63,33 @@
     await questionQuery.refetch();
     loading = false;
   };
+
+  const onCopy = async () => {
+    const value = `${page.url.origin}/questions/${question?.uuid}`;
+    await navigator.clipboard.writeText(value);
+
+    setTimeout(() => copied = true,     0);
+    setTimeout(() => copied = false, 2000);
+  };
+
+
+  const onDelete = async () => {
+    if (!isDeleting || !question)
+      return;
+
+    loading = true;
+
+    const params = { uuid: question.uuid };
+    const res = await api({ method:'POST', path:'/questions/[uuid]/delete', params });
+
+    if (res.error)
+      toaster.add({ type: 'error', content: m.generic_error_occurred() });
+    else
+      await goto("/me");
+
+    isDeleting = false;
+    loading = false;
+ };
 </script>
 
 {#if question}
@@ -101,16 +134,24 @@
         <Button variant="outline" onclick={onFollow} disabled={loading}>
           {follow ? m.question_following() : m.question_follow()}
         </Button>
-        <Button variant="outline">
-          <Share />
+        <Button variant="outline" onclick={onCopy}>
+          {#if copied}
+            <div in:blur>
+              <Check />
+            </div>
+          {:else}
+            <div in:blur>
+              <LinkIcon />
+            </div>
+          {/if}
         </Button>
       </ButtonGroup>
       {#if isAuthor}
         <ButtonGroup class="actions">
-          <Button variant="outline">
+          <Button variant="outline" onclick={() => isDeleting =! isDeleting}>
             <Trash />
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" disabled>
             <Pencil />
           </Button>
         </ButtonGroup>
@@ -145,6 +186,26 @@
 {:else}
   <NotFound message={m.questions_not_found({ uuid })} />
 {/if}
+
+<Overlay class="confirm-delete" bind:active={isDeleting} fill="fixed" center>
+  <Panel centered>
+    <div class="icon">
+      <Trash />
+    </div>
+    <div class="text">
+      <h3>{m.ask_are_you_sure()}</h3>
+      <span>{m.ask_are_you_sure_desc()}</span>
+    </div>
+    <div class="delete-actions">
+      <Button onclick={onDelete} disabled={loading}>
+        {m.generic_confirm()}
+      </Button>
+      <Button onclick={() => isDeleting = false}>
+        {m.generic_cancel()}
+      </Button>
+    </div>
+  </Panel>
+</Overlay>
 
 <style lang="scss">
   @use "@/styles/utils.scss" as *;

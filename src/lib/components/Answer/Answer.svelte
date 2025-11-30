@@ -4,7 +4,7 @@
   import "dayjs/locale/en";
   import "dayjs/locale/ar";
 
-  import { Button, ButtonGroup, Link, Panel, Separator, useToaster } from "titchy";
+  import { Button, ButtonGroup, Link, Overlay, Panel, Separator, useToaster } from "titchy";
   import { ArrowDown, ArrowUp, Calendar, Check, CircleCheckBig, Pencil, Trash } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
@@ -35,7 +35,8 @@
   const time      = $derived(dayjs(answer.created_at).locale(locale));
   const scoreSign = $derived(answer.score > 0 ? "+" : answer.score < 0 ? "-" : "");
 
-  let loading = $state<boolean>(false);
+  let isDeleting = $state<boolean>(false);
+  let loading    = $state<boolean>(false);
 
   const onVote = (dir: 'up' | 'down') => async () => {
     loading = true;
@@ -52,6 +53,23 @@
     await refetch?.();
     loading = false;
   };
+
+  const onDelete = async () => {
+    if (!isDeleting)
+      return;
+
+    loading = true;
+
+    const params = { uuid: answer.uuid };
+    const res = await api({ method:'POST', path:'/answers/[uuid]/delete', params });
+
+    if (res.error)
+      toaster.add({ type: 'error', content: m.generic_error_occurred() });
+
+    await refetch?.();
+    isDeleting = false;
+    loading = false;
+ };
 
   const onMarkSolution = async () => {
     loading = true;
@@ -95,10 +113,10 @@
       {/if}
       {#if isAuthor}
         <div class="author-actions">
-          <Button variant="outline">
+          <Button variant="outline" onclick={() => isDeleting =! isDeleting}>
             <Trash />
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" disabled>
             <Pencil />
           </Button>
         </div>
@@ -138,6 +156,26 @@
     </div>
   </div>
 </Panel>
+
+<Overlay class="confirm-delete" bind:active={isDeleting} fill="fixed" center>
+  <Panel centered>
+    <div class="icon">
+      <Trash />
+    </div>
+    <div class="text">
+      <h3>{m.ask_are_you_sure()}</h3>
+      <span>{m.ask_are_you_sure_desc()}</span>
+    </div>
+    <div class="delete-actions">
+      <Button onclick={onDelete} disabled={loading}>
+        {m.generic_confirm()}
+      </Button>
+      <Button onclick={() => isDeleting = false}>
+        {m.generic_cancel()}
+      </Button>
+    </div>
+  </Panel>
+</Overlay>
 
 <style lang="scss">
   @use "@/styles/utils.scss" as *;
@@ -248,6 +286,40 @@
           font-size: 0.66em;
 
           svg { @include size(1.25em); }
+        }
+      }
+    }
+  }
+
+  :global
+  .titchy.overlay.confirm-delete {
+    .titchy.panel {
+      min-width: min(300px, 80dvw);
+    }
+
+    .icon svg {
+      color: C(danger);
+      @include size(3em);
+    }
+
+    .text {
+      align-items: center;
+      gap: 5px;
+
+      span {
+        font-size: 0.8em;
+        color: C(secondary, 70%);
+      }
+    }
+
+    .delete-actions {
+      flex-direction: row;
+      gap: 10px;
+
+      .titchy.button {
+        min-width: min(150px, 30dvw);
+        &:first-of-type {
+          --button-accent-color: #{C(danger)};
         }
       }
     }
