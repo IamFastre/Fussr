@@ -1,1 +1,3 @@
-export interface LocalStorageEntries { }
+export interface LocalStorageEntries {
+  'theme': 'dark' | 'light';
+}

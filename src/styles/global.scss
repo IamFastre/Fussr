@@ -89,3 +89,9 @@ pre code {
   --titchy-color-accent:    var(--fussr-color-accent);
   --titchy-color-danger:    var(--fussr-color-danger);
 }
+
+.titchy.link {
+  .titchy.button {
+    flex: 1;
+  }
+}

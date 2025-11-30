@@ -15,7 +15,8 @@ export class StyleTheme {
 
     const html  = document.documentElement;
     const style = getComputedStyle(html);
-    const value = style.getPropertyValue(`--fussr-${category}-${name}`);
+    const value = style.getPropertyValue(`--fussr-${category}-${name}`)
+      .replace(/(^['"])|(["']$)/g, '');
 
     if (value.length)
       return value;

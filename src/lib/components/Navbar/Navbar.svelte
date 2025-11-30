@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import { page } from "$app/state";
   import { PUBLIC_NAME } from "$env/static/public";
   import { Link, Separator } from "titchy";
+
+  import { StyleTheme } from "$/client/styles";
 
   import type { Route } from "./types";
 
@@ -14,6 +17,19 @@
     routes,
     ...rest
   }: Props & HTMLAttributes<HTMLElement> = $props();
+
+  onMount(() => {
+    const onChange = () => {
+      assets = StyleTheme.property('theme', 'assets') as 'light' ?? 'light';
+    };
+
+    onChange();
+
+    window.addEventListener('custom-local-storage', onChange);
+    return () => window.removeEventListener('custom-local-storage', onChange);
+  });
+
+  let assets = $state<'dark' | 'light'>('light');
 </script>
 
 <nav
@@ -23,7 +39,7 @@
   <div class="content">
     <Link class="home-link" variant="wrapper" href="/">
       <img
-        src="/imgs/logos/alt_light.png"
+        src="/imgs/logos/alt_{assets}.png"
         alt="{PUBLIC_NAME}'s logo"
       />
     </Link>

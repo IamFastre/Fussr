@@ -253,6 +253,7 @@
       min-width: 0;
 
       .question-title {
+        align-self: start;
         color: C(accent);
         font-weight: bold;
         font-size: 1.25em;

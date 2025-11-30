@@ -1,7 +1,9 @@
 <script lang="ts">
   import 'titchy/styles';
+
 	import '@/styles/global.scss';
-  import '@/styles/prism.atom-dark.css';
+  import '@/styles/prism.material-dark.scss';
+  import '@/styles/prism.material-light.scss';
 
   import { browser } from '$app/environment';
   import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';

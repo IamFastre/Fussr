@@ -1,5 +1,5 @@
-:root[data-theme="default"] {
-  --fussr-theme-name:   "Default";
+:root, :root[data-theme="dark"] {
+  --fussr-theme-name:   "Dark";
   --fussr-theme-scheme: "dark";
   --fussr-theme-assets: "light";
 
@@ -30,4 +30,20 @@
   --fussr-value-navbar-small-height: 75px;
   --fussr-value-navbar-wide-width: min(20dvw, 200px);
   --fussr-value-navbar-wide-height: auto;
+}
+
+:root[data-theme="light"] {
+  --fussr-theme-name:   "Light";
+  --fussr-theme-scheme: "light";
+  --fussr-theme-assets: "dark";
+
+  /*** COlORS ***/
+  // Monochrome
+  --fussr-color-primary:   #f0fff0;
+  --fussr-color-secondary: #000000;
+  --fussr-color-tertiary:  #99f899;
+  // Kaleidoscopic
+  --fussr-color-accent:  #138a41;
+  --fussr-color-success: #0eb137;
+  --fussr-color-danger:  #e93232;
 }
