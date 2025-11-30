@@ -83,6 +83,7 @@ export type Database = {
           author: string
           body: string
           created_at: string
+          is_solution: boolean
           question: string
           score: number
           uuid: string
@@ -91,6 +92,7 @@ export type Database = {
           author: string
           body: string
           created_at?: string
+          is_solution?: boolean
           question: string
           score?: number
           uuid?: string
@@ -99,6 +101,7 @@ export type Database = {
           author?: string
           body?: string
           created_at?: string
+          is_solution?: boolean
           question?: string
           score?: number
           uuid?: string

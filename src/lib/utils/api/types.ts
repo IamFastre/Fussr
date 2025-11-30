@@ -141,5 +141,12 @@ type EndpointsMap = {
     Return: "OK";
   };
 
+  "/answers/[uuid]/mark-solution": {
+    Method: 'POST';
+    Params: { uuid:string };
+    Args:   undefined;
+    Return: "OK";
+  };
+
   /* ======================================================================== */
 };

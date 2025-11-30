@@ -6,6 +6,7 @@ CREATE TABLE public.answers (
   "question" UUID NOT NULL,
   "body" TEXT NOT NULL,
   "score" BIGINT NOT NULL DEFAULT 0,
+  "is_solution" BOOLEAN NOT NULL DEFAULT FALSE,
   "author" UUID NOT NULL,
   "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   --- Constrains ---

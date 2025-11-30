@@ -73,9 +73,9 @@
 
 <Pager
   class="questions-pager"
-  label="$page$"
-  min={1} max={Math.ceil(questions.total / LATEST_QUESTIONS_LIMIT)}
   bind:value={page}
+  min={1} max={Math.ceil(questions.total / LATEST_QUESTIONS_LIMIT)}
+  label="$page$"
 />
 
 <style lang="scss">

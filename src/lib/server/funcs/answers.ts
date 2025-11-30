@@ -23,12 +23,13 @@ export async function answerQuestion(answer: AnswerForm) {
     return null;
 
   return {
-    uuid: res.data.uuid,
-    body: res.data.body,
-    question: res.data.question,
-    author: res.data.author,
-    score: res.data.score,
-    created_at: res.data.created_at,
+    uuid:        res.data.uuid,
+    body:        res.data.body,
+    score:       res.data.score,
+    question:    res.data.question,
+    is_solution: res.data.is_solution,
+    author:      res.data.author,
+    created_at:  res.data.created_at,
   } satisfies AnswerPublic;
 }
 
@@ -68,6 +69,51 @@ export async function voteAnswer({ answer, vote }: { answer: string, vote: 'up' 
   }
 }
 
+export async function markSolution({ uuid }: { uuid:string }) {
+  const event = getRequestEvent();
+  const { supabase, auth } = event.locals;
+
+  if (!auth.user)
+    return null;
+
+  const answer = await supabase.admin
+    .from('answers')
+    .select('*')
+    .eq('uuid', uuid)
+    .single();
+
+  if (!answer.data)
+    return null;
+
+  const question = await supabase.admin
+    .from('questions')
+    .select('*')
+    .eq('uuid', answer.data.question)
+    .single();
+
+  if (!question.data)
+    return null;
+
+  // If user requesting the answer to be marked is not OP, leave
+  if (auth.user.id !== question.data.author)
+    return null;
+
+  // Reset previous solution
+  const reset = await supabase.admin
+    .from('answers')
+    .update({ is_solution:false })
+    .eq('question', question.data.uuid);
+
+  const solution = await supabase.admin
+    .from('answers')
+    .update({ is_solution:true })
+    .eq('uuid', uuid);
+
+  if (solution.error)
+    return null;
+
+  return uuid;
+}
 
 export async function getQuestionAnswers({ question, page }: { question:string, page:number }) {
   const event = getRequestEvent();
@@ -78,6 +124,8 @@ export async function getQuestionAnswers({ question, page }: { question:string, 
     .from('answers')
     .select('*, author:users(*)', { count:'exact' })
     .eq('question', question)
+    .order('is_solution', { ascending:false })
+    .order('score', { ascending:false })
     .order('created_at', { ascending: false })
     .range((page - 1) * LATEST_ANSWERS_LIMIT, (page * LATEST_ANSWERS_LIMIT) - 1);
 
@@ -92,20 +140,19 @@ export async function getQuestionAnswers({ question, page }: { question:string, 
           .select('*')
           .eq('author', auth.user?.id ?? '')
           .eq('answer', a.uuid)
-          .single()
+          .maybeSingle()
       })
   );
 
-  console.log(votes[0].error)
-
   const list = answers.data.map((a, i) => ({
-    uuid:       a.uuid,
-    body:       a.body,
-    score:      a.score,
-    question:   a.question,
-    vote:       !votes[i].data ? 'none' : votes[i].data.sign ? 'up' : 'down',
-    author:     a.author,
-    created_at: a.created_at,
+    uuid:        a.uuid,
+    body:        a.body,
+    score:       a.score,
+    question:    a.question,
+    vote:        !votes[i].data ? 'none' : votes[i].data.sign ? 'up' : 'down',
+    is_solution: a.is_solution,
+    author:      a.author,
+    created_at:  a.created_at,
   } as AnswerPersonal));
 
   return {

@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { InputWrapper, Panel, Textarea, Button, Separator, useToaster } from "titchy";
+  import { InputWrapper, Panel, Textarea, Button, Separator, useToaster, Pager } from "titchy";
 
   import { m } from "@/paraglide/messages";
   import type { QuestionPersonal } from "$/utils/types";
   import { api, query } from "$/client/api";
   import { Answer } from "$/components";
+  import { LATEST_ANSWERS_LIMIT } from "$/utils";
 
   interface Props {
     question: QuestionPersonal;
@@ -62,12 +63,17 @@
   </div>
   {#if answers.total}
     <Separator variant="secondary" line="dashed" />
+    <Pager
+      bind:value={page}
+      min={1} max={Math.ceil(answers.total / LATEST_ANSWERS_LIMIT)}
+      label="$page$"
+    />
+    <div class="answer-array">
+      {#each answers.list as answer}
+        <Answer {answer} {question} refetch={async () => void await answersQuery.refetch()} />
+      {/each}
+    </div>
   {/if}
-  <div class="answer-array">
-    {#each answers.list as answer}
-      <Answer {answer} {question} onVote={async () => void await answersQuery.refetch()} />
-    {/each}
-  </div>
 </Panel>
 
 <style lang="scss">

@@ -90,12 +90,13 @@ export type QuestionPersonal = QuestionPublic & {
 };
 
 export type AnswerPublic = {
-  uuid:       Tables<'answers'>['uuid'];
-  body:       Tables<'answers'>['body'];
-  score:      Tables<'answers'>['score'];
-  question:   Tables<'answers'>['question'];
-  author:     UserPublic;
-  created_at: Tables<'answers'>['created_at'];
+  uuid:        Tables<'answers'>['uuid'];
+  body:        Tables<'answers'>['body'];
+  score:       Tables<'answers'>['score'];
+  question:    Tables<'answers'>['question'];
+  is_solution: Tables<'answers'>['is_solution'];
+  author:      UserPublic;
+  created_at:  Tables<'answers'>['created_at'];
 };
 
 export type AnswerPersonal = AnswerPublic & {

@@ -4,8 +4,8 @@
   import "dayjs/locale/en";
   import "dayjs/locale/ar";
 
-  import { Button, ButtonGroup, Link, Panel } from "titchy";
-  import { ArrowDown, ArrowUp, Calendar, Check, Pencil, Trash } from "@lucide/svelte";
+  import { Button, ButtonGroup, Link, Panel, useToaster } from "titchy";
+  import { ArrowDown, ArrowUp, Calendar, Check, CircleCheckBig, Pencil, Trash } from "@lucide/svelte";
 
   import { m } from "@/paraglide/messages";
   import { getLocale } from "@/paraglide/runtime";
@@ -19,11 +19,12 @@
   interface Props {
     answer:   AnswerPersonal;
     question: QuestionPublic;
-    onVote?:  () => Promise<void>;
+    refetch?:  () => Promise<void>;
   }
 
-  const { answer, question, onVote: onAfterVote }: Props = $props();
+  const { answer, question, refetch }: Props = $props();
 
+  const toaster = useToaster();
   const locale = getLocale();
 
   const author    = $derived(answer.author);
@@ -47,12 +48,24 @@
     if (args.vote !== 'none')
       await api({ method:'POST', path:'/answers/[uuid]/vote', params, args });
 
-    await onAfterVote?.();
+    await refetch?.();
+    loading = false;
+  };
+
+  const onMarkSolution = async () => {
+    loading = true;
+    const params = { uuid: answer.uuid };
+    const res = await api({ method:'POST', path:'/answers/[uuid]/mark-solution', params });
+
+    if (res.error)
+      toaster.add({ type: 'error', content: m.generic_error_occurred() });
+
+    await refetch?.();
     loading = false;
   };
 </script>
 
-<Panel class="answer" variant="secondary" borderless>
+<Panel class={["answer", { solution:answer.is_solution }]} variant="secondary" borderless={!answer.is_solution}>
   <div class="side-actions">
     <Button class="up" variant={vote === 'up' ? 'primary' : 'secondary'} onclick={onVote('up')} disabled={loading}>
       <ArrowUp />
@@ -65,11 +78,18 @@
     <Button class="down" variant={vote === 'down' ? 'primary' : 'secondary'} onclick={onVote('down')} disabled={loading}>
       <ArrowDown />
     </Button>
+    {#if answer.is_solution}
+      <div class="answer-check" title={m.ask_solution()}>
+        <CircleCheckBig />
+      </div>
+    {/if}
     {#if isAsker}
-      <Button variant="primary" class="solution">
-        <Check />
-        Solution
-      </Button>
+      {#if !answer.is_solution}
+        <Button variant="primary" class="solution" onclick={onMarkSolution} disabled={loading}>
+          <Check />
+          {m.ask_solution()}
+        </Button>
+      {/if}
     {/if}
     {#if isAuthor}
       <div class="author-actions">
@@ -111,6 +131,13 @@
   .titchy.panel.answer {
     flex-direction: row;
 
+    &.solution {
+      --panel-accent-color: #{C(success)};
+      border-width: 3px;
+      border-color: C(success, 75%);
+      background-color: C(success, 25%);
+    }
+
     > .side-actions {
       align-items: stretch;
       gap: 10px;
@@ -133,6 +160,18 @@
         }
       }
 
+      .answer-check {
+        @include flex-center();
+        padding: 5px;
+        background-color: C(success);
+        border-radius: 10px;
+
+        svg {
+          color: C(primary);
+          @include size(1.5em);
+        }
+      }
+
       .solution {
         flex-direction: column;
         font-size: 0.66em;
@@ -145,7 +184,7 @@
       .author-actions {
         align-self: stretch;
         align-items: stretch;
-        gap: 10px;
+        gap: 5px;
 
         .titchy.button {
           @include size(auto, 'all');
