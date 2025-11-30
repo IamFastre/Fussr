@@ -185,20 +185,6 @@
         margin-bottom: -$b;
       }
 
-      .tags {
-        flex-direction: row;
-        gap: 0.5ch;
-
-        .tag {
-          color: C(accent);
-          background-color: C(accent, 10%);
-          padding: 2.5px 5px;
-
-          font-size: 0.75em;
-          border-radius: 5px;
-        }
-      }
-
       .foot {
         flex-direction: row;
         align-items: center;

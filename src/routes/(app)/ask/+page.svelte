@@ -26,7 +26,7 @@
         .replace(/(^-)|(-$)/g, "")
         .toLowerCase();
 
-      if (tag.length > 1 && tags.length < 6 && !tags.includes(tag)) {
+      if (tags.length < 6 && !tags.includes(tag)) {
         tags.push(tag);
         tagInput = "";
       }

@@ -12,7 +12,7 @@
 
 <div class="tags">
   {#each tags as tag, i (i)}
-    <Link class="tag" variant="wrapper" href="/tags/{tag}">
+    <Link class="tag tag-{tag}" variant="wrapper" href="/tags/{tag}">
       <span>#{tag}</span>
     </Link>
   {/each}
