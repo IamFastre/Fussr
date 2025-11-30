@@ -151,6 +151,10 @@ export async function editUser(args: ProfileEditForm) {
   const user = await getUserByUUID(auth.user.id);
   const { avatar, ...newUser } = data;
 
+  newUser.bio          = newUser.bio.length ? newUser.bio : undefined!;
+  newUser.display_name = newUser.display_name.length ? newUser.display_name : undefined!;
+  newUser.country      = newUser.country.length ? newUser.country : undefined!;
+
   const res = await supabase.admin
     .from('users')
     .update({ ...newUser, avatar: avatar ? `/api/users/${user!.username}/avatar?t=${Date.now()}` : undefined })
